@@ -12,24 +12,22 @@ private:
 	int initVitality;
 	int initFocus;
 	int initSpeed;
-	int initAccuracy;
+	int initHitRate;
 	int initPAttack;
 	int initMAttack;
 	int initPDefense;
 	int initMDefense;
 
-	int Vitality;
-	int Focus;
-	int Speed;
-	int Accuracy;
-	int PAttack;
-	int MAttack;
-	int PDefense;
-	int MDefense;
+	int vitality;
+	int focus;
+	int speed;
+	int hitRate;
+	int pAttack;
+	int mAttack;
+	int pDefense;
+	int mDefense;
 
-	Equipment Weapon;
-	Equipment Armor;
-	Equipment Accessory;
+	Equipment equipment;
 
 	std::vector<std::string> skills;
 public:
@@ -39,26 +37,26 @@ public:
 	void setVitality(int);
 	void setFocus(int);
 	void setSpeed(int);
-	void setAccuracy(int);
+	void setHitRate(int);
 	void setPAttack(int);
 	void setMAttack(int);
 	void setPDefense(int);
 	void setMDefense(int);
-	void setWeapon(Equipment);
-	void setArmor(Equipment);
-	void setAccessory(Equipment);
+	void setWeapon(int);
+	void setArmor(int);
+	void setAccessory(int);
 
 	int getVitality() const;
 	int getFocus() const;
 	int getSpeed() const;
-	int getAccuracy() const;
+	int getHitRate() const;
 	int getPAttack() const;
 	int getMAttack() const;
 	int getPDefense() const;
 	int getMDefense() const;
-	Equipment getWeapon() const;
-	Equipment getArmor() const;
-	Equipment getAccessory() const;
+	int getWeapon() const;
+	int getArmor() const;
+	int getAccessory() const;
 
 	double RolltheDice(int, int);
 
