@@ -17,15 +17,23 @@ Entity::Entity()
 	this->equipment.setArmor(ARMOR_IDX::ARMOR_NONE);
 	this->equipment.setAccessory(ACCESSORY_IDX::ACCESSORY_NONE);
 
-	this->vitality = equipment.getVitality(this->initVitality);
-	this->focus = equipment.getFocus(this->initFocus);
-	this->speed = equipment.getSpeed(this->initSpeed);
-	this->hitRate = equipment.getHitRate(this->initHitRate);
-	this->pAttack = equipment.getPAttack(this->initPAttack);
-	this->mAttack = equipment.getMAttack(this->initMAttack);
-	this->pDefense = equipment.getPDefense(this->initPDefense);
-	this->mDefense = equipment.getMDefense(this->initMDefense);
+	this->maxVitality = equipment.getVitality(this->initVitality);
+	this->maxFocus = equipment.getFocus(this->initFocus);
+	this->maxSpeed = equipment.getSpeed(this->initSpeed);
+	this->maxHitRate = equipment.getHitRate(this->initHitRate);
+	this->maxPAttack = equipment.getPAttack(this->initPAttack);
+	this->maxMAttack = equipment.getMAttack(this->initMAttack);
+	this->maxPDefense = equipment.getPDefense(this->initPDefense);
+	this->maxMDefense = equipment.getMDefense(this->initMDefense);
 
+	this->curVitality = this->maxVitality;
+	this->curFocus = this->maxFocus;
+	this->curSpeed = this->maxSpeed;
+	this->curHitRate = this->maxHitRate;
+	this->curPAttack = this->maxPAttack;
+	this->curMAttack = this->maxMAttack;
+	this->curPDefense = this->maxPDefense;
+	this->curMDefense = this->maxMDefense;
 }
 
 Entity::~Entity()
@@ -33,35 +41,35 @@ Entity::~Entity()
 }
 
 void Entity::setVitality(int vitality) {
-	this->vitality = vitality;
+	this->maxVitality = vitality;
 }
 
 void Entity::setFocus(int focus) {
-	this->focus = focus;
+	this->maxFocus = focus;
 }
 
 void Entity::setSpeed(int speed) {
-	this->speed = speed;
+	this->maxSpeed = speed;
 }
 
 void Entity::setHitRate(int hitRate) {
-	this->hitRate = hitRate;
+	this->maxHitRate = hitRate;
 }
 
 void Entity::setPAttack(int pAttack) {
-	this->pAttack = pAttack;
+	this->maxPAttack = pAttack;
 }
 
 void Entity::setMAttack(int mAttack) {
-	this->mAttack = mAttack;
+	this->maxMAttack = mAttack;
 }
 
 void Entity::setPDefense(int pDefense) {
-	this->pDefense = pDefense;
+	this->maxPDefense = pDefense;
 }
 
 void Entity::setMDefense(int mDefense) {
-	this->mDefense = mDefense;
+	this->maxMDefense = mDefense;
 }
 
 void Entity::setWeapon(int weapon) {
@@ -135,7 +143,7 @@ double Entity::RolltheDice(int diceNum, int successNum)
 		{
 			int Roll = rand() % 100 + 1;
 
-			if (Roll >= hitRate)
+			if (Roll >= curHitRate)
 			{
 				successRate++;
 			}
@@ -145,16 +153,76 @@ double Entity::RolltheDice(int diceNum, int successNum)
 	return successRate / diceNum;
 }
 
+void Entity::update()
+{
+	this->maxVitality = equipment.getVitality(this->initVitality);
+	this->maxFocus = equipment.getFocus(this->initFocus);
+	this->maxSpeed = equipment.getSpeed(this->initSpeed);
+	this->maxHitRate = equipment.getHitRate(this->initHitRate);
+	this->maxPAttack = equipment.getPAttack(this->initPAttack);
+	this->maxMAttack = equipment.getMAttack(this->initMAttack);
+	this->maxPDefense = equipment.getPDefense(this->initPDefense);
+	this->maxMDefense = equipment.getMDefense(this->initMDefense);
+}
+
+bool Entity::useSkill(int skill_IDX, std::vector<Entity>& target)
+{
+	if (skill_IDX >= skills.size() || skillsCD[skill_IDX] != 0)
+	{
+		return false;
+	}
+
+	skill curSkill = skills[skill_IDX];
+	skillsCD[skill_IDX] = curSkill.cd;
+
+	if (curSkill.type == SKILLTYPE::ATK)
+	{
+		if (getWeapon() == WEAPON_IDX::MAGIC_WAND || getWeapon() == WEAPON_IDX::RITUAL_SWORD)
+		{
+			this->curMAttack = equipment.useSkill(RolltheDice(curSkill.diceNum, useFocus()), skill_IDX); //之後更改
+			attack(0, this->curMAttack, target);
+		}
+		else
+		{
+			this->curPAttack = equipment.useSkill(RolltheDice(curSkill.diceNum, useFocus()), skill_IDX); //之後更改
+			attack(this->curPAttack, 0, target);
+		}
+	}
+
+}
+
+int Entity::useFocus()
+{
+	int useFocus = 0;
+	while (std::cin >> useFocus)
+	{
+		if (useFocus > curFocus)
+		{
+			std::cout << "Focus not enough !!\n";
+			std::cout << "Re-enter: ";
+		}
+		else
+		{
+			this->curFocus -= useFocus;
+			return useFocus;
+		}
+	}
+}
+
+void Entity::attack(int, int, std::vector<Entity>&)
+{
+}
+
 void Entity::printInfo()
 {
-	std::cout << "Vitality is: " << vitality << std::endl;
-	std::cout << "Focus is: " << focus << std::endl;
-	std::cout << "Speed is: " << speed << std::endl;
-	std::cout << "HitRate is: " << hitRate << std::endl;
-	std::cout << "PAttack is: " << pAttack << std::endl;
-	std::cout << "MAttack is: " << mAttack << std::endl;
-	std::cout << "PDefense is: " << pDefense << std::endl;
-	std::cout << "MDefense is: " << mDefense << std::endl;
+	std::cout << "Vitality is: " << curVitality << " / " << maxVitality << std::endl;
+	std::cout << "Focus is: " << curFocus << " / " << maxFocus << std::endl;
+	std::cout << "Speed is: " << curSpeed << " / " << maxSpeed << std::endl;
+	std::cout << "HitRate is: " << curHitRate << " / " << maxHitRate << std::endl;
+	std::cout << "PAttack is: " << curPAttack << " / " << maxPAttack << std::endl;
+	std::cout << "MAttack is: " << curMAttack << " / " << maxMAttack << std::endl;
+	std::cout << "PDefense is: " << curPDefense << " / " << maxPDefense << std::endl;
+	std::cout << "MDefense is: " << curMDefense << " / " << maxMDefense << std::endl;
 	std::cout << "Weapon is: " << equipment.getWeapon() << std::endl;
 	std::cout << "Armor is: " << equipment.getArmor() << std::endl;
 	std::cout << "Accessory is: " << equipment.getAccessory() << std::endl;

@@ -18,18 +18,28 @@ private:
 	int initPDefense;
 	int initMDefense;
 
-	int vitality;
-	int focus;
-	int speed;
-	int hitRate;
-	int pAttack;
-	int mAttack;
-	int pDefense;
-	int mDefense;
+	int maxVitality;
+	int maxFocus;
+	int maxSpeed;
+	int maxHitRate;
+	int maxPAttack;
+	int maxMAttack;
+	int maxPDefense;
+	int maxMDefense;
+
+	int curVitality;
+	int curFocus;
+	int curSpeed;
+	int curHitRate;
+	int curPAttack;
+	int curMAttack;
+	int curPDefense;
+	int curMDefense;
 
 	Equipment equipment;
 
-	std::vector<std::string> skills;
+	std::vector<skill> skills;
+	std::vector<int> skillsCD;
 public:
 	Entity();
 	~Entity();
@@ -59,6 +69,10 @@ public:
 	int getAccessory() const;
 
 	double RolltheDice(int, int);
+	void update();
+	bool useSkill(int, std::vector<Entity>&);
+	int useFocus();
+	void attack(int, int, std::vector<Entity>&);
 
 	void printInfo();
 };
