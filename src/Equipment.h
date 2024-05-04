@@ -1,5 +1,6 @@
 #pragma once
-
+#include<vector>
+#include<string>
 using namespace std;
 
 enum WEAPON_IDX
@@ -30,12 +31,66 @@ enum ACCESSORY_IDX
 	BRACELET = 3
 };
 
+enum skillType
+{
+	atk = 1,
+	sp = 2
+};
+
+struct skill
+{
+	int type;		//sp,atk
+	string name;	//skill name
+	bool isPassive; //T passive  F active
+	int diceNum;	//number of dice 
+	int cd;			//cool down time
+};
+
 class Equipment
 {
+private:
 	int weapon = WEAPON_IDX::WEAPON_NONE;
 	int armor = ARMOR_IDX::ARMOR_NONE;
 	int accessory = ACCESSORY_IDX::ACCESSORY_NONE;
-	int weaponAtk = 0;
-	int armorDef = 0;
 
+	int eVitality = 0;
+	int eFocus = 0;
+	int eSpeed = 0;
+	int eHitRate = 0;
+	int ePAttack = 0;
+	int eMAttack = 0;
+	int ePDefense = 0;
+	int eMDefense = 0;
+
+	double mulVitality = 1;
+	double mulFocus = 1;
+	double mulSpeed = 1;
+	double mulHitRate = 1;
+	double mulPAttack = 1;
+	double mulMAttack = 1;
+	double mulPDefense = 1;
+	double mulMDefense = 1;
+	vector<skill> skills;
+
+public:
+
+	void setWeapon(int);
+	void setArmor(int);
+	void setAccessory(int);
+
+	int getWeapon() const;
+	int getArmor() const;
+	int getAccessory() const;
+
+	int getVitality(int vitality) const;
+	int getFocus(int Focus) const;
+	int getSpeed(int Speed) const;
+	int getHitRate(int HitRate) const;
+	int getPAttack(int PAttack) const;
+	int getMAttack(int MAttack) const;
+	int getPDefense(int PDefense) const;
+	int getMDefense(int MDefense) const;
+
+	vector<struct skill> getSkills();
+	int useSkill(double rate, int index);
 };
