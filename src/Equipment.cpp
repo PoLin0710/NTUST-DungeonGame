@@ -1,71 +1,73 @@
 #include "Equipment.h"
 
-void Equipment::setWeapon(int)
+void Equipment::setWeapon(int idx)
 {
-
+	weapon = idx;
 }
 
-void Equipment::setArmor(int)
+void Equipment::setArmor(int idx)
 {
-
+	armor = idx;
 }
 
-void Equipment::setAccessory(int)
+void Equipment::setAccessory(int idx)
 {
-
+	accessory = idx;
 }
 
 int Equipment::getWeapon() const
 {
-
+	return weapon;
 }
+
 int Equipment::getArmor() const
 {
-
+	return armor;
 }
+
 int Equipment::getAccessory() const
 {
-
+	return accessory;
 }
 
 int Equipment::getVitality(int vitality) const
 {
-	return (vitality + eVitality) * mulVitality;
+	return min(int((vitality + eVitality) * mulVitality), maxVitality);
 }
 
-int Equipment::getFocus(int Focus) const
+int Equipment::getFocus(int focus) const
 {
-	return (Focus + eFocus) * mulFocus;
+	return min(int((focus + eFocus) * mulFocus), maxFocus);
 }
 
-int Equipment::getSpeed(int Speed) const
+int Equipment::getSpeed(int speed) const
 {
-	return (Speed + eSpeed) * mulSpeed;
+	return min(int((speed + eSpeed) * mulSpeed), maxSpeed);
 }
 
-int Equipment::getHitRate(int HitRate) const
+int Equipment::getHitRate(int hitRate) const
 {
-	return (HitRate + eHitRate) * mulHitRate;
+	return min(int((hitRate + eHitRate) * mulHitRate), maxHitRate);
 }
 
-int Equipment::getPAttack(int PAttack) const
+int Equipment::getPAttack(int pAttack) const
 {
-	return (PAttack + ePAttack) * mulPAttack;
+	return min(int((pAttack + ePAttack) * mulPAttack), maxPAttack);
 }
 
-int Equipment::getMAttack(int MAttack) const
+int Equipment::getMAttack(int mAttack) const
 {
-	return (MAttack + eMAttack) * mulMAttack;
+	return min(int((mAttack + eMAttack) * mulMAttack), maxMAttack);
 }
 
-int Equipment::getPDefense(int PDefense) const
+int Equipment::getPDefense(int pDefense) const
 {
-	return (PDefense + ePDefense) * mulPDefense;
+	return min(int((pDefense + ePDefense) * mulPDefense), maxPDefense);
 }
 
-int Equipment::getMDefense(int MDefense) const
+int Equipment::getMDefense(int mDefense) const
 {
-	return (MDefense + eMDefense) * mulMDefense;
+	return min(int((mDefense + eMDefense) * mulMDefense), maxMDefense);
 }
 
 vector<struct skill> Equipment::getSkills()

@@ -31,10 +31,25 @@ enum ACCESSORY_IDX
 	BRACELET = 3
 };
 
-enum skillType
+enum SKILL_IDX
 {
-	atk = 1,
-	sp = 2
+	ATTACK = 0,
+	FLEE = 1,
+	PROVOKE = 2,
+	SHOCK_BLAST = 3,
+	HEAL = 4,
+	SPEEDUP = 5,
+	RUN = 6,
+	HAMMER_SPLASH = 7,
+	DESTROY = 8,
+	FORTIFY = 9,
+	STARBURST_STREAM = 10
+};
+
+enum SKILLTYPE
+{
+	ATK = 1,
+	SP = 2
 };
 
 struct skill
@@ -70,7 +85,34 @@ private:
 	double mulMAttack = 1;
 	double mulPDefense = 1;
 	double mulMDefense = 1;
-	vector<skill> skills;
+
+	int maxVitality = 100;
+	int maxFocus = 100;
+	int maxSpeed = 100;
+	int maxHitRate = 100;
+	int maxPAttack = 100;
+	int maxMAttack = 100;
+	int maxPDefense = 100;
+	int maxMDefense = 100;
+
+	skill skills[20] = { {SKILLTYPE::ATK, "ATTACK", false, 1, 0},
+						 {SKILLTYPE::SP, "FLEE", false, 1, 0},
+						 {SKILLTYPE::SP, "PROVOKE", false, 1, 2},
+						 {SKILLTYPE::ATK, "SHOCK_BLAST", false, 3, 1},
+						 {SKILLTYPE::SP, "HEAL", false, 2, 1},
+						 {SKILLTYPE::SP, "SPEEDUP", false, 2, 3},
+						 {SKILLTYPE::SP, "RUN", true, 0, 0},
+						 {SKILLTYPE::ATK, "HAMMER_SPLASH", true, 0, 0},
+						 {SKILLTYPE::SP, "DESTROY", true, 0, 0},
+						 {SKILLTYPE::SP, "FORTIFY", true, 0, 5},
+						 {SKILLTYPE::SP, "STARBURST_STREAM", false, 16, 10} };
+
+	int diceNum;	//number of dice 
+	int cd;			//cool down time
+
+	vector<skill> weaponSkills;
+	vector<skill> armorSkills;
+	vector<skill> accessorySkills;
 
 public:
 
