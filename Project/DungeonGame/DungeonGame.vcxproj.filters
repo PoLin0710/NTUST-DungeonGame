@@ -21,12 +21,18 @@
     <ClCompile Include="..\..\src\Entity.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Equipment.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Entity.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Equipment.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Buff.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

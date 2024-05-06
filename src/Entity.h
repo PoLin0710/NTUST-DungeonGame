@@ -2,10 +2,13 @@
 #define _ENTITY_H_
 
 #include "Equipment.h"
+#include "Buff.h"
 #include <cstdlib>
 #include <iostream>
 #include <vector>
 #include <string>
+#include <ctime>
+#include <map>
 
 class Entity {
 private:
@@ -40,8 +43,13 @@ private:
 
 	Equipment equipment;
 
-	std::vector<skill> skills;
-	std::vector<int> skillsCD;
+	std::vector<skill> activeSkills;
+	std::vector<int> activeSkillsCD;
+
+	std::vector<skill> passiveSkills;
+	std::vector<int> passiveSkillsCD;
+
+	std::vector<Buff::Buff> buffs;
 public:
 	Entity();
 	~Entity();
@@ -76,6 +84,7 @@ public:
 	int useFocus();
 	void heal(int, std::vector<Entity*>);
 	void attack(int, int, std::vector<Entity*>);
+	void insertBuff(int);
 	std::vector<Entity*> chooseEntitys(int, std::vector<Entity*>);
 
 	void printInfo();

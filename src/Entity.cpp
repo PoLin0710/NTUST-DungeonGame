@@ -2,20 +2,20 @@
 
 Entity::Entity()
 {
-	srand(time(NULL));
-
 	this->initVitality = 30 + rand() % 15; // Range [30,45)
 	this->initFocus = 3;
 	this->initSpeed = 30 + rand() % 25; // Range [30,55)
 	this->initHitRate = 40 + rand() % 20; // Range [40,60)
-	this->initPAttack = 5 + rand() % 16; // Range [5,15]
-	this->initMAttack = 5 + rand() % 16; // Range [5,15]
+	this->initPAttack = 5 + rand() % 11; // Range [5,15]
+	this->initMAttack = 5 + rand() % 11; // Range [5,15]
 	this->initPDefense = rand() % 21; // Range [0,20]
 	this->initMDefense = rand() % 21; // Range [0,20]
 
-	this->equipment.setWeapon(WEAPON_IDX::WEAPON_NONE);
+	this->equipment.setWeapon(WEAPON_IDX::HAMMER);
 	this->equipment.setArmor(ARMOR_IDX::ARMOR_NONE);
 	this->equipment.setAccessory(ACCESSORY_IDX::ACCESSORY_NONE);
+
+	equipment.updateEquipment();
 
 	this->maxVitality = equipment.getVitality(this->initVitality);
 	this->maxFocus = equipment.getFocus(this->initFocus);
@@ -140,17 +140,25 @@ double Entity::RolltheDice(int diceNum, int successNum)
 		if (i < successNum)
 		{
 			successRate++;
+
+			std::cout << "True ";
 		}
 		else
 		{
 			int Roll = rand() % 100 + 1;
 
-			if (Roll >= curHitRate)
+			if (Roll < curHitRate)
 			{
 				successRate++;
+				std::cout << "True ";
+			}
+			else
+			{
+				std::cout << "False ";
 			}
 		}
 	}
+	std::cout << "\n";
 
 	return successRate / diceNum;
 }
@@ -168,41 +176,47 @@ void Entity::update()
 	this->maxMDefense = equipment.getMDefense(this->initMDefense);
 
 	isFlee = false;
-	skills = equipment.getSkills();
-	skillsCD.clear();
-	skillsCD.resize(skills.size(), 0);
-
+	activeSkills = equipment.getSkills();
+	passiveSkills = equipment.getPassiveSkills();
+	activeSkillsCD.clear();
+	passiveSkillsCD.clear();
+	activeSkillsCD.resize(activeSkills.size(), 0);
+	passiveSkillsCD.resize(passiveSkills.size(), 0);
 }
 
 bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Entity*> enemys)
 {
-	if (skill_IDX >= skills.size() || skillsCD[skill_IDX] != 0)
+	if (skill_IDX >= activeSkills.size() || activeSkillsCD[skill_IDX] != 0)
 	{
 		return false;
 	}
 
-	skill curSkill = skills[skill_IDX];
-	skillsCD[skill_IDX] = curSkill.cd;
+	skill curSkill = activeSkills[skill_IDX];
+	activeSkillsCD[skill_IDX] = curSkill.cd;
 
 	if (curSkill.type == SKILLTYPE::ATK)
 	{
-		std::vector<Entity*> target = chooseEntitys(curSkill.skillIDX, enemys);
+		std::vector<Entity*> target = chooseEntitys(curSkill.skillIdx, enemys);
+
 		if (getWeapon() == WEAPON_IDX::MAGIC_WAND || getWeapon() == WEAPON_IDX::RITUAL_SWORD)
 		{
-			this->curMAttack = equipment.useSkill(RolltheDice(curSkill.diceNum, useFocus()), skill_IDX); //之後更改
+			this->curHitRate = this->maxHitRate - 5;
+			this->curMAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus()); //之後更改
 			attack(0, this->curMAttack, target);
+
+			this->curHitRate = this->maxHitRate;
 		}
 		else
 		{
-			this->curPAttack = equipment.useSkill(RolltheDice(curSkill.diceNum, useFocus()), skill_IDX); //之後更改
+			this->curPAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus()); //之後更改
 			attack(this->curPAttack, 0, target);
 		}
 	}
 	else
 	{
-		if (curSkill.skillIDX == SKILL_IDX::FLEE)
+		if (curSkill.skillIdx == SKILL_IDX::FLEE)
 		{
-			int rate = double(this->curVitality) / (this->maxVitality + (this->curPDefense + this->curMDefense)) * this->curSpeed;
+			int rate = double(this->curVitality) / (this->maxVitality + this->curPDefense + this->curMDefense) * this->curSpeed;
 			rate = std::min(rate, 98);
 
 			this->curHitRate = rate;
@@ -216,17 +230,39 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 			}
 
 		}
-		else if (curSkill.skillIDX == SKILL_IDX::PROVOKE)
+		else if (curSkill.skillIdx == SKILL_IDX::PROVOKE)
 		{
+			int rate = double(this->curVitality) / (this->maxVitality + this->curPDefense + this->curMDefense) * this->curSpeed;
+
+			std::vector<Entity*> target = chooseEntitys(curSkill.skillIdx, enemys);
+			this->curHitRate = rate;
+			double state = RolltheDice(1, useFocus());
+			this->curHitRate = this->maxHitRate;
+
+			if (state >= 1)
+			{
+				std::cout << "PROVOKE success\n";
+				target[0]->insertBuff(Buff::BUFF_IDX::BANGRY);
+			}
 
 		}
-		else if (curSkill.skillIDX == SKILL_IDX::HEAL)
+		else if (curSkill.skillIdx == SKILL_IDX::HEAL)
 		{
+			std::vector<Entity*> target = chooseEntitys(curSkill.skillIdx, roles);
+			this->curMAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus());
+			heal(this->curMAttack, target);
 
 		}
-		else if (curSkill.skillIDX == SKILL_IDX::SPEEDUP)
+		else if (curSkill.skillIdx == SKILL_IDX::SPEEDUP)
 		{
+			std::vector<Entity*> target = chooseEntitys(curSkill.skillIdx, roles);
+			double state = RolltheDice(curSkill.diceNum, useFocus());
 
+			if (state >= 1)
+			{
+				std::cout << "SPEEDUP success\n";
+				target[0]->insertBuff(Buff::BUFF_IDX::BSPEEDUP);
+			}
 		}
 	}
 
@@ -264,9 +300,31 @@ void Entity::attack(int pAttack, int mAttack, std::vector<Entity*> enemys)
 		int realMAttack = mAttack * mDefense;
 
 		i->curVitality -= (realPAttack + realMAttack);
-		std::cout << "realPAttack : " << realPAttack << "realMAttack : " << realMAttack << std::endl;
-		i->printInfo();
+		i->curVitality = std::max(i->curVitality, 0);
 	}
+}
+
+void Entity::insertBuff(int buffIdx)
+{
+	Buff::Buff temp;
+	switch (buffIdx)
+	{
+	case Buff::BUFF_IDX::BANGRY:
+		temp = { Buff::BUFF_IDX::BANGRY,3 };
+		break;
+	case Buff::BUFF_IDX::BDIZZINESS:
+		temp = { Buff::BUFF_IDX::BDIZZINESS,1 };
+		break;
+	case Buff::BUFF_IDX::BPOISONED:
+		temp = { Buff::BUFF_IDX::BPOISONED,-1 };
+		break;
+	case Buff::BUFF_IDX::BSPEEDUP:
+		temp = { Buff::BUFF_IDX::BSPEEDUP,-1 };
+		break;
+	default:
+		break;
+	}
+	buffs.push_back(temp);
 }
 
 void Entity::heal(int mAttack, std::vector<Entity*> enemys)
@@ -276,8 +334,7 @@ void Entity::heal(int mAttack, std::vector<Entity*> enemys)
 		int realMAttack = mAttack;
 
 		i->curVitality += realMAttack;
-		std::cout << "Heal : " << realMAttack << std::endl;
-		i->printInfo();
+		i->curVitality = std::min(i->curVitality, i->maxVitality);
 	}
 }
 
@@ -292,9 +349,13 @@ std::vector<Entity*> Entity::chooseEntitys(int skill_IDX, std::vector<Entity*> c
 	{
 		if (i == skill_IDX)
 		{
+			int pr = 0;
 			for (auto j : chooseList)
 			{
+				std::cout << "Index: " << pr << std::endl;
 				j->printInfo();
+				pr++;
+
 			}
 
 			int index;

@@ -1,7 +1,8 @@
-#include <string>
+#pragma once
 #include <vector>
-#ifndef _EQUIPMENT_H_
-#define _EQUIPMENT_H_
+#include <string>
+#include <algorithm>
+using namespace std;
 
 enum WEAPON_IDX
 {
@@ -31,12 +32,6 @@ enum ACCESSORY_IDX
 	BRACELET = 3
 };
 
-enum SKILLTYPE
-{
-	ATK = 1,
-	SP = 2
-};
-
 enum SKILL_IDX
 {
 	ATTACK = 0,
@@ -52,113 +47,97 @@ enum SKILL_IDX
 	STARBURST_STREAM = 10
 };
 
+enum SKILLTYPE
+{
+	ATK = 1,
+	SP = 2
+};
+
 struct skill
 {
-	int type;
-	int skillIDX;
-	std::string name;
-	bool isPassive;
-	int diceNum;
-	int cd;
+	int skillIdx;   //skill idx
+	int type;		//sp,atk
+	string name;	//skill name
+	bool isPassive; //T passive  F active
+	int diceNum;	//number of dice 
+	int cd;			//cool down time
 };
 
 class Equipment
 {
-	int vitality;
-	int focus;
-	int speed;
-	int hitRate;
-	int pAttack;
-	int mAttack;
-	int pDefense;
-	int mDefense;
-
-	double mulVitality;
-	double mulFocus;
-	double mulSpeed;
-	double mulhitRate;
-	double mulPAttack;
-	double mulMAttack;
-	double mulPDefense;
-	double mulMDefense;
-
+private:
 	int weapon = WEAPON_IDX::WEAPON_NONE;
 	int armor = ARMOR_IDX::ARMOR_NONE;
 	int accessory = ACCESSORY_IDX::ACCESSORY_NONE;
 
-	std::vector<skill> skills;
+	int eVitality = 0;
+	int eFocus = 0;
+	int eSpeed = 0;
+	int eHitRate = 0;
+	int ePAttack = 0;
+	int eMAttack = 0;
+	int ePDefense = 0;
+	int eMDefense = 0;
+
+	double mulVitality = 1;
+	double mulFocus = 1;
+	double mulSpeed = 1;
+	double mulHitRate = 1;
+	double mulPAttack = 1;
+	double mulMAttack = 1;
+	double mulPDefense = 1;
+	double mulMDefense = 1;
+
+	int maxVitality = 100;
+	int maxFocus = 3;
+	int maxSpeed = 100;
+	int maxHitRate = 100;
+	int maxPAttack = 100;
+	int maxMAttack = 100;
+	int maxPDefense = 100;
+	int maxMDefense = 100;
+
+	skill skills[20] = { {SKILL_IDX::ATTACK, SKILLTYPE::ATK, "ATTACK", false, 1, 0},
+						 {SKILL_IDX::FLEE, SKILLTYPE::SP, "FLEE", false, 1, 0},
+						 {SKILL_IDX::PROVOKE, SKILLTYPE::SP, "PROVOKE", false, 1, 2},
+						 {SKILL_IDX::SHOCK_BLAST, SKILLTYPE::ATK, "SHOCK_BLAST", false, 3, 1},
+						 {SKILL_IDX::HEAL, SKILLTYPE::SP, "HEAL", false, 2, 1},
+						 {SKILL_IDX::SPEEDUP, SKILLTYPE::SP, "SPEEDUP", false, 2, 3},
+						 {SKILL_IDX::RUN, SKILLTYPE::SP, "RUN", true, 0, 0},
+						 {SKILL_IDX::HAMMER_SPLASH, SKILLTYPE::ATK, "HAMMER_SPLASH", true, 0, 0},
+						 {SKILL_IDX::DESTROY, SKILLTYPE::SP, "DESTROY", true, 0, 0},
+						 {SKILL_IDX::FORTIFY, SKILLTYPE::SP, "FORTIFY", true, 0, 5},
+						 {SKILL_IDX::STARBURST_STREAM, SKILLTYPE::SP, "STARBURST_STREAM", false, 16, 10} };
+
+	int diceNum;	//number of dice 
+	int cd;			//cool down time
+
+	vector<skill> weaponSkills;
+	vector<skill> armorSkills;
+	vector<skill> accessorySkills;
 
 public:
-	int getVitality(int param) const {
-		return param;
-	}
 
-	int getFocus(int param) const {
-		return param;
-	}
+	void setWeapon(int idx);
+	void setArmor(int idx);
+	void setAccessory(int idx);
+	void updateEquipment();
 
-	int getSpeed(int param) const {
-		return param;
-	}
+	int getWeapon() const;
+	int getArmor() const;
+	int getAccessory() const;
 
-	int getHitRate(int param) const {
-		return param;
-	}
+	int getVitality(int vitality) const;
+	int getFocus(int Focus) const;
+	int getMaxFocus(int Focus) const;
+	int getSpeed(int Speed) const;
+	int getHitRate(int HitRate) const;
+	int getPAttack(int PAttack) const;
+	int getMAttack(int MAttack) const;
+	int getPDefense(int PDefense) const;
+	int getMDefense(int MDefense) const;
+	skill getSkill(int idx) const;
 
-	int getPAttack(int param) const {
-		return param;
-	}
-
-	int getMAttack(int param) const {
-		return param;
-	}
-
-	int getPDefense(int param) const {
-		return param;
-	}
-
-	int getMDefense(int param) const {
-		return param;
-	}
-
-	std::vector<skill> getSkills()
-	{
-		std::vector<skill> ans;
-		ans.push_back({ SKILLTYPE::ATK,0, "ATTACK", false, 1, 0 });
-		ans.push_back({ SKILLTYPE::SP,4, "HEAL", false, 2, 1 });
-		ans.push_back({ SKILLTYPE::SP, 1,"FLEE", false, 1, 0 });
-		return ans;
-	}
-	int useSkill(double rate, int i) {
-		return 10;
-	}
-
-	void setWeapon(int weapon)
-	{
-		this->weapon = weapon;
-	}
-	void setArmor(int armor) {
-		this->armor = armor;
-	}
-
-	void setAccessory(int accessory) {
-		this->accessory = accessory;
-	}
-
-	int getWeapon() const
-	{
-		return this->weapon;
-	}
-
-	int getArmor() const
-	{
-		return this->armor;
-	}
-
-	int getAccessory() const
-	{
-		return this->accessory;
-	}
+	vector<skill> getSkills();
+	vector<skill> getPassiveSkills();
 };
-
-#endif //_EQUIPMENT_H_
