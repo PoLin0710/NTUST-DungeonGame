@@ -163,9 +163,13 @@ void Entity::update()
 	this->maxMAttack = equipment.getMAttack(this->initMAttack);
 	this->maxPDefense = equipment.getPDefense(this->initPDefense);
 	this->maxMDefense = equipment.getMDefense(this->initMDefense);
+
+	skills = equipment.getSkills();
+	skillsCD.clear();
+	skillsCD.resize(skills.size(), 0);
 }
 
-bool Entity::useSkill(int skill_IDX, std::vector<Entity>& target)
+bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Entity*> enemys)
 {
 	if (skill_IDX >= skills.size() || skillsCD[skill_IDX] != 0)
 	{
@@ -177,6 +181,7 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity>& target)
 
 	if (curSkill.type == SKILLTYPE::ATK)
 	{
+		std::vector<Entity*> target = chooseEntitys(curSkill.skillIDX, enemys);
 		if (getWeapon() == WEAPON_IDX::MAGIC_WAND || getWeapon() == WEAPON_IDX::RITUAL_SWORD)
 		{
 			this->curMAttack = equipment.useSkill(RolltheDice(curSkill.diceNum, useFocus()), skill_IDX); //之後更改
@@ -186,6 +191,25 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity>& target)
 		{
 			this->curPAttack = equipment.useSkill(RolltheDice(curSkill.diceNum, useFocus()), skill_IDX); //之後更改
 			attack(this->curPAttack, 0, target);
+		}
+	}
+	else
+	{
+		if (curSkill.skillIDX == SKILL_IDX::FLEE)
+		{
+
+		}
+		else if (curSkill.skillIDX == SKILL_IDX::PROVOKE)
+		{
+
+		}
+		else if (curSkill.skillIDX == SKILL_IDX::HEAL)
+		{
+
+		}
+		else if (curSkill.skillIDX == SKILL_IDX::SPEEDUP)
+		{
+
 		}
 	}
 
@@ -209,8 +233,68 @@ int Entity::useFocus()
 	}
 }
 
-void Entity::attack(int, int, std::vector<Entity>&)
+void Entity::attack(int pAttack, int mAttack, std::vector<Entity*> enemys)
 {
+	for (auto i : enemys)
+	{
+		double pDefense = 1 - (i->curPDefense / double(i->curPDefense + 50));
+		double mDefense = 1 - (i->curMDefense / double(i->curMDefense + 50));
+
+		int realPAttack = pAttack * pDefense;
+		int realMAttack = mAttack * mDefense;
+
+		i->curVitality -= (realPAttack + realMAttack);
+		std::cout << "realPAttack : " << realPAttack << "realMAttack : " << realMAttack << std::endl;
+		i->printInfo();
+	}
+}
+
+void Entity::heal(int mAttack, std::vector<Entity*> enemys)
+{
+	for (auto i : enemys)
+	{
+		int realMAttack = mAttack;
+
+		i->curVitality += realMAttack;
+		std::cout << "Heal : " << realMAttack << std::endl;
+		i->printInfo();
+	}
+}
+
+std::vector<Entity*> Entity::chooseEntitys(int skill_IDX, std::vector<Entity*> chooseList)
+{
+	int oneSelf[] = { SKILL_IDX::ATTACK ,SKILL_IDX::FLEE,SKILL_IDX::PROVOKE,SKILL_IDX::HEAL,SKILL_IDX::SPEEDUP, };
+	int allSelf[] = { SKILL_IDX::SHOCK_BLAST };
+
+	std::vector<Entity*> target;
+
+	for (int i : oneSelf)
+	{
+		if (i == skill_IDX)
+		{
+			for (auto j : chooseList)
+			{
+				j->printInfo();
+			}
+
+			int index;
+
+			std::cout << "Choose 1 (0-2):";
+			std::cin >> index;
+
+			target.push_back(chooseList[index]);
+			return target;
+		}
+	}
+
+
+	for (auto i : chooseList)
+	{
+		target.push_back(i);
+	}
+
+	return target;
+
 }
 
 void Entity::printInfo()

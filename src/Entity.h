@@ -70,9 +70,11 @@ public:
 
 	double RolltheDice(int, int);
 	void update();
-	bool useSkill(int, std::vector<Entity>&);
+	bool useSkill(int, std::vector<Entity*>, std::vector<Entity*>);
 	int useFocus();
-	void attack(int, int, std::vector<Entity>&);
+	void heal(int, std::vector<Entity*>);
+	void attack(int, int, std::vector<Entity*>);
+	std::vector<Entity*> chooseEntitys(int, std::vector<Entity*>);
 
 	void printInfo();
 };
