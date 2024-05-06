@@ -167,12 +167,92 @@ int Equipment::getMDefense(int mDefense) const
 	return min(int((mDefense + eMDefense) * mulMDefense), maxMDefense);
 }
 
-vector<struct skill> Equipment::getSkills()
+skill Equipment::getSkill(int idx) const
 {
-
+	return skills[idx];
 }
 
-vector<struct skill> Equipment::getPassiveSkills()
-{
+bool compareSkill(const skill& s1, const skill& s2) {
+	return s1.skillIdx < s2.skillIdx;
+}
 
+vector<skill> Equipment::getSkills()
+{
+	vector<skill> vecSkill;
+	vecSkill.push_back(skills[SKILL_IDX::ATTACK]);
+	vecSkill.push_back(skills[SKILL_IDX::FLEE]);
+
+	//Weapon
+	if (weapon == WEAPON_IDX::WOODEN_SWORD){
+		vecSkill.push_back(skills[SKILL_IDX::SPEEDUP]);
+	}
+	else if (weapon == WEAPON_IDX::HAMMER)
+	{
+		vecSkill.push_back(skills[SKILL_IDX::PROVOKE]);
+	}
+	else if (weapon == WEAPON_IDX::MAGIC_WAND)
+	{
+		vecSkill.push_back(skills[SKILL_IDX::SHOCK_BLAST]);
+		vecSkill.push_back(skills[SKILL_IDX::HEAL]);
+	}
+	else if (weapon == WEAPON_IDX::RITUAL_SWORD)
+	{
+		vecSkill.push_back(skills[SKILL_IDX::SHOCK_BLAST]);
+	}
+
+	//Armor
+	if (armor == ARMOR_IDX::WOODEN_SHIELD)
+	{
+		vecSkill.push_back(skills[SKILL_IDX::PROVOKE]);
+	}
+
+	//Accessory
+	if (accessory == ACCESSORY_IDX::HOLY_GRAIL)
+	{
+		vecSkill.push_back(skills[SKILL_IDX::HEAL]);
+	}
+	
+	sort(vecSkill.begin(), vecSkill.end(), compareSkill);
+	auto it = std::unique(vecSkill.begin(), vecSkill.end(), compareSkill);
+	vecSkill.erase(it, vecSkill.end());
+
+	return vecSkill;
+}
+
+vector<skill> Equipment::getPassiveSkills()
+{
+	vector<skill> vecSkill;
+
+	//Weapon
+	if (weapon == WEAPON_IDX::HAMMER)
+	{
+		vecSkill.push_back(skills[SKILL_IDX::HAMMER_SPLASH]);
+		vecSkill.push_back(skills[SKILL_IDX::PROVOKE]);
+	}
+	else if (weapon == WEAPON_IDX::GIANT_HAMMER)
+	{
+		vecSkill.push_back(skills[SKILL_IDX::HAMMER_SPLASH]);
+	}
+
+	//Armor
+	if (armor == ARMOR_IDX::PLATE_ARMOR)
+	{
+		vecSkill.push_back(skills[SKILL_IDX::FORTIFY]);
+	}
+	else if (armor == ARMOR_IDX::LEATHER_ARMOR)
+	{
+		vecSkill.push_back(skills[SKILL_IDX::FORTIFY]);
+	}
+
+	//Accessory
+	else if (accessory == ACCESSORY_IDX::SHOES)
+	{
+		vecSkill.push_back(skills[SKILL_IDX::RUN]);
+	}
+
+	sort(vecSkill.begin(), vecSkill.end(), compareSkill);
+	auto it = std::unique(vecSkill.begin(), vecSkill.end(), compareSkill);
+	vecSkill.erase(it, vecSkill.end());
+
+	return vecSkill;
 }

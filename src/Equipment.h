@@ -1,6 +1,7 @@
 #pragma once
-#include<vector>
-#include<string>
+#include <vector>
+#include <string>
+#include <algorithm>
 using namespace std;
 
 enum WEAPON_IDX
@@ -135,7 +136,8 @@ public:
 	int getMAttack(int MAttack) const;
 	int getPDefense(int PDefense) const;
 	int getMDefense(int MDefense) const;
+	skill getSkill(int idx) const;
 
-	vector<struct skill> getSkills();
-	vector<struct skill> getPassiveSkills();
+	vector<skill> getSkills();
+	vector<skill> getPassiveSkills();
 };
