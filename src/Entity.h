@@ -36,6 +36,8 @@ private:
 	int curPDefense;
 	int curMDefense;
 
+	bool isFlee;
+
 	Equipment equipment;
 
 	std::vector<skill> skills;

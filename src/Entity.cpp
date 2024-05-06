@@ -34,6 +34,8 @@ Entity::Entity()
 	this->curMAttack = this->maxMAttack;
 	this->curPDefense = this->maxPDefense;
 	this->curMDefense = this->maxMDefense;
+
+	this->isFlee = false;
 }
 
 Entity::~Entity()
@@ -153,6 +155,7 @@ double Entity::RolltheDice(int diceNum, int successNum)
 	return successRate / diceNum;
 }
 
+//¾Ô°««eÄ²µo
 void Entity::update()
 {
 	this->maxVitality = equipment.getVitality(this->initVitality);
@@ -164,9 +167,11 @@ void Entity::update()
 	this->maxPDefense = equipment.getPDefense(this->initPDefense);
 	this->maxMDefense = equipment.getMDefense(this->initMDefense);
 
+	isFlee = false;
 	skills = equipment.getSkills();
 	skillsCD.clear();
 	skillsCD.resize(skills.size(), 0);
+
 }
 
 bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Entity*> enemys)
@@ -197,6 +202,18 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 	{
 		if (curSkill.skillIDX == SKILL_IDX::FLEE)
 		{
+			int rate = double(this->curVitality) / (this->maxVitality + (this->curPDefense + this->curMDefense)) * this->curSpeed;
+			rate = std::min(rate, 98);
+
+			this->curHitRate = rate;
+			double state = RolltheDice(1, useFocus());
+			this->curHitRate = this->maxHitRate;
+
+			if (state >= 1)
+			{
+				std::cout << "Flee success\n";
+				isFlee = true;
+			}
 
 		}
 		else if (curSkill.skillIDX == SKILL_IDX::PROVOKE)
@@ -218,6 +235,9 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 int Entity::useFocus()
 {
 	int useFocus = 0;
+
+	std::cout << "Use Focus: ";
+
 	while (std::cin >> useFocus)
 	{
 		if (useFocus > curFocus)
@@ -310,5 +330,6 @@ void Entity::printInfo()
 	std::cout << "Weapon is: " << equipment.getWeapon() << std::endl;
 	std::cout << "Armor is: " << equipment.getArmor() << std::endl;
 	std::cout << "Accessory is: " << equipment.getAccessory() << std::endl;
+	std::cout << "isFlee : " << isFlee << std::endl;
 }
 
