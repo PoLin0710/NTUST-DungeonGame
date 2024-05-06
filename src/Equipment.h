@@ -54,6 +54,7 @@ enum SKILLTYPE
 
 struct skill
 {
+	int skillIdx;   //skill idx
 	int type;		//sp,atk
 	string name;	//skill name
 	bool isPassive; //T passive  F active
@@ -87,7 +88,7 @@ private:
 	double mulMDefense = 1;
 
 	int maxVitality = 100;
-	int maxFocus = 100;
+	int maxFocus = 3;
 	int maxSpeed = 100;
 	int maxHitRate = 100;
 	int maxPAttack = 100;
@@ -95,17 +96,17 @@ private:
 	int maxPDefense = 100;
 	int maxMDefense = 100;
 
-	skill skills[20] = { {SKILLTYPE::ATK, "ATTACK", false, 1, 0},
-						 {SKILLTYPE::SP, "FLEE", false, 1, 0},
-						 {SKILLTYPE::SP, "PROVOKE", false, 1, 2},
-						 {SKILLTYPE::ATK, "SHOCK_BLAST", false, 3, 1},
-						 {SKILLTYPE::SP, "HEAL", false, 2, 1},
-						 {SKILLTYPE::SP, "SPEEDUP", false, 2, 3},
-						 {SKILLTYPE::SP, "RUN", true, 0, 0},
-						 {SKILLTYPE::ATK, "HAMMER_SPLASH", true, 0, 0},
-						 {SKILLTYPE::SP, "DESTROY", true, 0, 0},
-						 {SKILLTYPE::SP, "FORTIFY", true, 0, 5},
-						 {SKILLTYPE::SP, "STARBURST_STREAM", false, 16, 10} };
+	skill skills[20] = { {SKILL_IDX::ATTACK, SKILLTYPE::ATK, "ATTACK", false, 1, 0},
+						 {SKILL_IDX::FLEE, SKILLTYPE::SP, "FLEE", false, 1, 0},
+						 {SKILL_IDX::PROVOKE, SKILLTYPE::SP, "PROVOKE", false, 1, 2},
+						 {SKILL_IDX::SHOCK_BLAST, SKILLTYPE::ATK, "SHOCK_BLAST", false, 3, 1},
+						 {SKILL_IDX::HEAL, SKILLTYPE::SP, "HEAL", false, 2, 1},
+						 {SKILL_IDX::SPEEDUP, SKILLTYPE::SP, "SPEEDUP", false, 2, 3},
+						 {SKILL_IDX::RUN, SKILLTYPE::SP, "RUN", true, 0, 0},
+						 {SKILL_IDX::HAMMER_SPLASH, SKILLTYPE::ATK, "HAMMER_SPLASH", true, 0, 0},
+						 {SKILL_IDX::DESTROY, SKILLTYPE::SP, "DESTROY", true, 0, 0},
+						 {SKILL_IDX::FORTIFY, SKILLTYPE::SP, "FORTIFY", true, 0, 5},
+						 {SKILL_IDX::STARBURST_STREAM, SKILLTYPE::SP, "STARBURST_STREAM", false, 16, 10} };
 
 	int diceNum;	//number of dice 
 	int cd;			//cool down time
@@ -116,9 +117,10 @@ private:
 
 public:
 
-	void setWeapon(int);
-	void setArmor(int);
-	void setAccessory(int);
+	void setWeapon(int idx);
+	void setArmor(int idx);
+	void setAccessory(int idx);
+	void updateEquipment();
 
 	int getWeapon() const;
 	int getArmor() const;
@@ -126,6 +128,7 @@ public:
 
 	int getVitality(int vitality) const;
 	int getFocus(int Focus) const;
+	int getMaxFocus(int Focus) const;
 	int getSpeed(int Speed) const;
 	int getHitRate(int HitRate) const;
 	int getPAttack(int PAttack) const;
@@ -134,5 +137,5 @@ public:
 	int getMDefense(int MDefense) const;
 
 	vector<struct skill> getSkills();
-	int useSkill(double rate, int index);
+	vector<struct skill> getPassiveSkills();
 };
