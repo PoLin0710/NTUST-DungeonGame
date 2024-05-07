@@ -167,6 +167,16 @@ double Entity::RolltheDice(int diceNum, int successNum)
 	}
 	std::cout << "\n";
 
+	//Debuff angry check
+	auto it = std::find_if(buffs.begin(), buffs.end(), [](const Buff::Buff& buff) {
+		return buff.buffIdx==Buff::BUFF_IDX::BANGRY;
+		});
+
+	if (it != buffs.end())
+	{
+		successRate * 0.7;
+	}
+
 	return successRate / diceNum;
 }
 
@@ -273,6 +283,7 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 		}
 	}
 
+	turnEnd();
 }
 
 int Entity::useFocus()
@@ -387,6 +398,23 @@ std::vector<Entity*> Entity::chooseEntitys(int skill_IDX, std::vector<Entity*> c
 
 }
 
+void Entity::turnEnd()
+{
+	for (auto i =buffs.begin();i!=buffs.end();i++)
+	{
+		if (i->turn>0)
+		{
+			i->turn=i->turn-1;
+		}
+	}
+
+	buffs.erase(std::remove_if(buffs.begin(), buffs.end(), [](const Buff::Buff& src) {
+		return src.turn == 0;
+		}), buffs.end());
+
+	int debug=0;
+}
+
 void Entity::printInfo()
 {
 	std::cout << "Vitality is: " << curVitality << " / " << maxVitality << std::endl;
@@ -405,7 +433,7 @@ void Entity::printInfo()
 	std::cout << "Active Skills :";
 	for (auto i : activeSkills)
 	{
-		std::cout << getSkillName(i.skillIdx) << " ";
+		std::cout << getSkillName(i.skillIdx)<< " ";
 	}
 	std::cout << std::endl;
 	std::cout << "Passive Skills : ";
@@ -417,7 +445,7 @@ void Entity::printInfo()
 	std::cout << "Buff : ";
 	for (auto i : buffs)
 	{
-		std::cout << getBuffName(i.buffIdx) << " ";
+		std::cout << getBuffName(i.buffIdx) << " , "<<i.turn<<" ";
 	}
 	std::cout << std::endl;
 }

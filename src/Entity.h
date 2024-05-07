@@ -87,6 +87,7 @@ public:
 	void attack(int, int, std::vector<Entity*>);
 	void insertBuff(int);
 	std::vector<Entity*> chooseEntitys(int, std::vector<Entity*>);
+	void turnEnd();
 
 	void printInfo();
 };

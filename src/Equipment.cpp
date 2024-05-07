@@ -47,25 +47,30 @@ void Equipment::updateEquipment()
 	//Weapon
 	if (weapon == WEAPON_IDX::WOODEN_SWORD)
 	{
+		skills[SKILL_IDX::ATTACK].diceNum = 3;
 		ePAttack += 5;
 		eHitRate += 10;
 	}
 	else if (weapon == WEAPON_IDX::HAMMER)
 	{
+		skills[SKILL_IDX::ATTACK].diceNum = 4;
 		ePAttack += 15;
 		eHitRate -= 15;
 	}
 	else if (weapon == WEAPON_IDX::GIANT_HAMMER)
 	{
+		skills[SKILL_IDX::ATTACK].diceNum = 5;
 		ePAttack += 20;
 		eHitRate -= 15;
 	}
 	else if (weapon == WEAPON_IDX::MAGIC_WAND)
 	{
+		skills[SKILL_IDX::ATTACK].diceNum = 3;
 		eMAttack += 10;
 	}
 	else if (weapon == WEAPON_IDX::RITUAL_SWORD)
 	{
+		skills[SKILL_IDX::ATTACK].diceNum = 1;
 		eMAttack += 15;
 	}
 
