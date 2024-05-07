@@ -173,7 +173,7 @@ skill Equipment::getSkill(int idx) const
 }
 
 bool compareSkill(const skill& s1, const skill& s2) {
-	return s1.skillIdx < s2.skillIdx;
+	return s1.skillIdx == s2.skillIdx;
 }
 
 vector<skill> Equipment::getSkills()
