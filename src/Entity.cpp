@@ -15,7 +15,14 @@ Entity::Entity()
 	this->equipment.setArmor(ARMOR_IDX::WOODEN_SHIELD);
 	this->equipment.setAccessory(ACCESSORY_IDX::ACCESSORY_NONE);
 
-	equipment.updateEquipment();
+	this->equipment.updateEquipment();
+
+	this->activeSkills = equipment.getSkills();
+	this->passiveSkills = equipment.getPassiveSkills();
+	this->activeSkillsCD.clear();
+	this->passiveSkillsCD.clear();
+	this->activeSkillsCD.resize(activeSkills.size(), 0);
+	this->passiveSkillsCD.resize(passiveSkills.size(), 0);
 
 	this->maxVitality = equipment.getVitality(this->initVitality);
 	this->maxFocus = equipment.getFocus(this->initFocus);
@@ -349,15 +356,17 @@ std::vector<Entity*> Entity::chooseEntitys(int skill_IDX, std::vector<Entity*> c
 	{
 		if (i == skill_IDX)
 		{
+			
 			int pr = 0;
 			for (auto j : chooseList)
 			{
-				std::cout << "Index: " << pr << std::endl;
+				std::cout << "===============================\n";
+				std::cout << "Index: " << pr << std::endl<<std::endl;
 				j->printInfo();
 				pr++;
-
+				std::cout << "===============================\n";
 			}
-
+			
 			int index;
 
 			std::cout << "Choose 1 (0-2):";
@@ -388,9 +397,28 @@ void Entity::printInfo()
 	std::cout << "MAttack is: " << curMAttack << " / " << maxMAttack << std::endl;
 	std::cout << "PDefense is: " << curPDefense << " / " << maxPDefense << std::endl;
 	std::cout << "MDefense is: " << curMDefense << " / " << maxMDefense << std::endl;
-	std::cout << "Weapon is: " << equipment.getWeapon() << std::endl;
-	std::cout << "Armor is: " << equipment.getArmor() << std::endl;
-	std::cout << "Accessory is: " << equipment.getAccessory() << std::endl;
+	std::cout << "Weapon is: " << getWeaponName(equipment.getWeapon()) << std::endl;
+	std::cout << "Armor is: " << getArmorName(equipment.getArmor()) << std::endl;
+	std::cout << "Accessory is: " << getAccessoryName(equipment.getAccessory()) << std::endl;
 	std::cout << "isFlee : " << isFlee << std::endl;
+
+	std::cout << "Active Skills :";
+	for (auto i : activeSkills)
+	{
+		std::cout << getSkillName(i.skillIdx) << " ";
+	}
+	std::cout << std::endl;
+	std::cout << "Passive Skills : ";
+	for (auto i : passiveSkills)
+	{
+		std::cout << getSkillName(i.skillIdx) << " ";
+	}
+	std::cout << std::endl;
+	std::cout << "Buff : ";
+	for (auto i : buffs)
+	{
+		std::cout << getBuffName(i.buffIdx) << " ";
+	}
+	std::cout << std::endl;
 }
 

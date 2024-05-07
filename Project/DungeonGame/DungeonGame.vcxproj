@@ -21,12 +21,14 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\Entity.cpp" />
     <ClCompile Include="..\..\src\Equipment.cpp" />
+    <ClCompile Include="..\..\src\List.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Buff.h" />
     <ClInclude Include="..\..\src\Entity.h" />
     <ClInclude Include="..\..\src\Equipment.h" />
+    <ClInclude Include="..\..\src\List.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

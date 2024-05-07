@@ -3,6 +3,7 @@
 
 #include "Equipment.h"
 #include "Buff.h"
+#include "List.h"
 #include <cstdlib>
 #include <iostream>
 #include <vector>
