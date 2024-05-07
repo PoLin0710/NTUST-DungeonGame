@@ -12,7 +12,7 @@ Entity::Entity()
 	this->initMDefense = rand() % 21; // Range [0,20]
 
 	this->equipment.setWeapon(WEAPON_IDX::HAMMER);
-	this->equipment.setArmor(ARMOR_IDX::ARMOR_NONE);
+	this->equipment.setArmor(ARMOR_IDX::WOODEN_SHIELD);
 	this->equipment.setAccessory(ACCESSORY_IDX::ACCESSORY_NONE);
 
 	equipment.updateEquipment();

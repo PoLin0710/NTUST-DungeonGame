@@ -172,8 +172,14 @@ skill Equipment::getSkill(int idx) const
 	return skills[idx];
 }
 
-bool compareSkill(const skill& s1, const skill& s2) {
+bool compareSkill(const skill& s1, const skill& s2)
+{
 	return s1.skillIdx < s2.skillIdx;
+}
+
+bool equalSkill(const skill& s1, const skill& s2)
+{
+	return s1.skillIdx == s2.skillIdx;
 }
 
 vector<skill> Equipment::getSkills()
@@ -213,7 +219,7 @@ vector<skill> Equipment::getSkills()
 	}
 
 	sort(vecSkill.begin(), vecSkill.end(), compareSkill);
-	auto it = std::unique(vecSkill.begin(), vecSkill.end(), compareSkill);
+	auto it = std::unique(vecSkill.begin(), vecSkill.end(), equalSkill);
 	vecSkill.erase(it, vecSkill.end());
 
 	return vecSkill;
@@ -227,7 +233,6 @@ vector<skill> Equipment::getPassiveSkills()
 	if (weapon == WEAPON_IDX::HAMMER)
 	{
 		vecSkill.push_back(skills[SKILL_IDX::HAMMER_SPLASH]);
-		vecSkill.push_back(skills[SKILL_IDX::PROVOKE]);
 	}
 	else if (weapon == WEAPON_IDX::GIANT_HAMMER)
 	{
@@ -251,7 +256,7 @@ vector<skill> Equipment::getPassiveSkills()
 	}
 
 	sort(vecSkill.begin(), vecSkill.end(), compareSkill);
-	auto it = std::unique(vecSkill.begin(), vecSkill.end(), compareSkill);
+	auto it = std::unique(vecSkill.begin(), vecSkill.end(), equalSkill);
 	vecSkill.erase(it, vecSkill.end());
 
 	return vecSkill;
