@@ -1,7 +1,9 @@
 #include "Entity.h"
 
-Entity::Entity()
+Entity::Entity(std::string _name)
 {
+	this->name = _name;
+
 	this->initVitality = 30 + rand() % 15; // Range [30,45)
 	this->initFocus = 3;
 	this->initSpeed = 30 + rand() % 25; // Range [30,55)
@@ -11,8 +13,8 @@ Entity::Entity()
 	this->initPDefense = rand() % 21; // Range [0,20]
 	this->initMDefense = rand() % 21; // Range [0,20]
 
-	this->equipment.setWeapon(WEAPON_IDX::HAMMER);
-	this->equipment.setArmor(ARMOR_IDX::WOODEN_SHIELD);
+	this->equipment.setWeapon(WEAPON_IDX::WOODEN_SWORD);
+	this->equipment.setArmor(ARMOR_IDX::PLATE_ARMOR);
 	this->equipment.setAccessory(ACCESSORY_IDX::ACCESSORY_NONE);
 
 	this->equipment.updateEquipment();
@@ -95,36 +97,42 @@ void Entity::setAccessory(int accessory) {
 
 
 int Entity::getVitality() const {
-	return initVitality;
+	return curVitality;
 }
 
 int Entity::getFocus() const {
-	return initFocus;
+	return curFocus;
 }
 
-int Entity::getSpeed() const {
-	return initSpeed;
+int Entity::getSpeed() {
+	if (findBuffs(Buff::BUFF_IDX::BSPEEDUP))
+	{
+		return curSpeed * 1.5;
+	}
+
+	return curSpeed;
 }
 
 int Entity::getHitRate() const {
-	return initHitRate;
+	return curHitRate;
 }
 
 int Entity::getPAttack() const {
-	return initPAttack;
+	return curPAttack;
 }
 
 int Entity::getMAttack() const {
-	return initMAttack;
+	return curMAttack;
 }
 
 int Entity::getPDefense() const {
-	return initPDefense;
+	return curPDefense;
 }
 
 int Entity::getMDefense() const {
-	return initMDefense;
+	return curMDefense;
 }
+
 
 int Entity::getWeapon() const {
 	return equipment.getWeapon();
@@ -168,11 +176,7 @@ double Entity::RolltheDice(int diceNum, int successNum)
 	std::cout << "\n";
 
 	//Debuff angry check
-	auto it = std::find_if(buffs.begin(), buffs.end(), [](const Buff::Buff& buff) {
-		return buff.buffIdx==Buff::BUFF_IDX::BANGRY;
-		});
-
-	if (it != buffs.end())
+	if (findBuffs(Buff::BUFF_IDX::BANGRY))
 	{
 		successRate * 0.7;
 	}
@@ -218,14 +222,14 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 		if (getWeapon() == WEAPON_IDX::MAGIC_WAND || getWeapon() == WEAPON_IDX::RITUAL_SWORD)
 		{
 			this->curHitRate = this->maxHitRate - 5;
-			this->curMAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus()); //之後更改
+			this->curMAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum)); //之後更改
 			attack(0, this->curMAttack, target);
 
 			this->curHitRate = this->maxHitRate;
 		}
 		else
 		{
-			this->curPAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus()); //之後更改
+			this->curPAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum)); //之後更改
 			attack(this->curPAttack, 0, target);
 		}
 	}
@@ -237,7 +241,7 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 			rate = std::min(rate, 98);
 
 			this->curHitRate = rate;
-			double state = RolltheDice(1, useFocus());
+			double state = RolltheDice(1, useFocus(curSkill.diceNum));
 			this->curHitRate = this->maxHitRate;
 
 			if (state >= 1)
@@ -253,7 +257,7 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 
 			std::vector<Entity*> target = chooseEntitys(curSkill.skillIdx, enemys);
 			this->curHitRate = rate;
-			double state = RolltheDice(1, useFocus());
+			double state = RolltheDice(1, useFocus(curSkill.diceNum));
 			this->curHitRate = this->maxHitRate;
 
 			if (state >= 1)
@@ -266,14 +270,14 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 		else if (curSkill.skillIdx == SKILL_IDX::HEAL)
 		{
 			std::vector<Entity*> target = chooseEntitys(curSkill.skillIdx, roles);
-			this->curMAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus());
+			this->curMAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum));
 			heal(this->curMAttack, target);
 
 		}
 		else if (curSkill.skillIdx == SKILL_IDX::SPEEDUP)
 		{
 			std::vector<Entity*> target = chooseEntitys(curSkill.skillIdx, roles);
-			double state = RolltheDice(curSkill.diceNum, useFocus());
+			double state = RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum));
 
 			if (state >= 1)
 			{
@@ -283,14 +287,24 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 		}
 	}
 
+	auto it = std::find_if(buffs.begin(), buffs.end(), [](const Buff::Buff& buff) {
+		return buff.buffIdx == Buff::BUFF_IDX::BPOISONED;
+		});
+
+	if (it != buffs.end())
+	{
+		std::cout << "Launch Debuff Poisoned!\n";
+		this->curVitality -= (this->curVitality * 0.1);
+	}
+
 	turnEnd();
 }
 
-int Entity::useFocus()
+int Entity::useFocus(int diceNum)
 {
 	int useFocus = 0;
 
-	std::cout << "Use Focus: ";
+	std::cout << "Use Focus(0-" << std::min(curFocus, diceNum) << "): ";
 
 	while (std::cin >> useFocus)
 	{
@@ -324,6 +338,7 @@ void Entity::attack(int pAttack, int mAttack, std::vector<Entity*> enemys)
 
 void Entity::insertBuff(int buffIdx)
 {
+	this;
 	Buff::Buff temp;
 	switch (buffIdx)
 	{
@@ -334,15 +349,16 @@ void Entity::insertBuff(int buffIdx)
 		temp = { Buff::BUFF_IDX::BDIZZINESS,1 };
 		break;
 	case Buff::BUFF_IDX::BPOISONED:
-		temp = { Buff::BUFF_IDX::BPOISONED,-1 };
+		temp = { Buff::BUFF_IDX::BPOISONED,3 };
 		break;
 	case Buff::BUFF_IDX::BSPEEDUP:
-		temp = { Buff::BUFF_IDX::BSPEEDUP,-1 };
+		temp = { Buff::BUFF_IDX::BSPEEDUP,1 };
 		break;
 	default:
 		break;
 	}
-	buffs.push_back(temp);
+	this->buffs.push_back(temp);
+	int x = 0;
 }
 
 void Entity::heal(int mAttack, std::vector<Entity*> enemys)
@@ -367,20 +383,18 @@ std::vector<Entity*> Entity::chooseEntitys(int skill_IDX, std::vector<Entity*> c
 	{
 		if (i == skill_IDX)
 		{
-			
+
 			int pr = 0;
 			for (auto j : chooseList)
 			{
-				std::cout << "===============================\n";
-				std::cout << "Index: " << pr << std::endl<<std::endl;
+				std::cout << "Index: " << pr << std::endl << std::endl;
 				j->printInfo();
 				pr++;
-				std::cout << "===============================\n";
 			}
-			
+
 			int index;
 
-			std::cout << "Choose 1 (0-2):";
+			std::cout << "Choose 1 (0-" << chooseList.size() - 1 << "):";
 			std::cin >> index;
 
 			target.push_back(chooseList[index]);
@@ -398,13 +412,34 @@ std::vector<Entity*> Entity::chooseEntitys(int skill_IDX, std::vector<Entity*> c
 
 }
 
+//回傳是否開始下一個步驟 否直接到TurnEnd
+bool Entity::turnStart()
+{
+	for (int i = 0; i < activeSkillsCD.size(); i++)
+	{
+		activeSkillsCD[i] = std::max(activeSkillsCD[i] - 1, 0);
+	}
+
+	for (int i = 0; i < passiveSkillsCD.size(); i++)
+	{
+		passiveSkillsCD[i] = std::max(passiveSkillsCD[i] - 1, 0);
+	}
+
+	if (findBuffs(Buff::BUFF_IDX::BDIZZINESS))
+	{
+		return false;
+	}
+
+	return true;
+}
+
 void Entity::turnEnd()
 {
-	for (auto i =buffs.begin();i!=buffs.end();i++)
+	for (auto i = buffs.begin(); i != buffs.end(); i++)
 	{
-		if (i->turn>0)
+		if (i->turn > 0)
 		{
-			i->turn=i->turn-1;
+			i->turn = i->turn - 1;
 		}
 	}
 
@@ -412,41 +447,72 @@ void Entity::turnEnd()
 		return src.turn == 0;
 		}), buffs.end());
 
-	int debug=0;
+	int debug = 0;
+}
+
+bool Entity::findSkills(SKILL_IDX skillIdx)
+{
+	auto it = std::find_if(passiveSkills.begin(), passiveSkills.end(), [skillIdx](const skill& skill) {
+		return skill.skillIdx == skillIdx;
+		});
+
+	if (it != passiveSkills.end())
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Entity::findBuffs(Buff::BUFF_IDX buffIdx)
+{
+	auto it = std::find_if(buffs.begin(), buffs.end(), [buffIdx](const Buff::Buff& buff) {
+		return buff.buffIdx == buffIdx;
+		});
+
+	if (it != buffs.end())
+	{
+		return true;
+	}
+
+	return false;
 }
 
 void Entity::printInfo()
 {
-	std::cout << "Vitality is: " << curVitality << " / " << maxVitality << std::endl;
-	std::cout << "Focus is: " << curFocus << " / " << maxFocus << std::endl;
-	std::cout << "Speed is: " << curSpeed << " / " << maxSpeed << std::endl;
-	std::cout << "HitRate is: " << curHitRate << " / " << maxHitRate << std::endl;
-	std::cout << "PAttack is: " << curPAttack << " / " << maxPAttack << std::endl;
-	std::cout << "MAttack is: " << curMAttack << " / " << maxMAttack << std::endl;
-	std::cout << "PDefense is: " << curPDefense << " / " << maxPDefense << std::endl;
-	std::cout << "MDefense is: " << curMDefense << " / " << maxMDefense << std::endl;
-	std::cout << "Weapon is: " << getWeaponName(equipment.getWeapon()) << std::endl;
-	std::cout << "Armor is: " << getArmorName(equipment.getArmor()) << std::endl;
-	std::cout << "Accessory is: " << getAccessoryName(equipment.getAccessory()) << std::endl;
-	std::cout << "isFlee : " << isFlee << std::endl;
+	std::cout << "===================================================" << std::endl;
+	std::cout << "|Name is :" << name << std::endl;
+	std::cout << "|Vitality is: " << curVitality << " / " << maxVitality << std::endl;
+	std::cout << "|Focus is: " << curFocus << " / " << maxFocus << std::endl;
+	std::cout << "|Speed is: " << curSpeed << " / " << maxSpeed << std::endl;
+	std::cout << "|HitRate is: " << curHitRate << " / " << maxHitRate << std::endl;
+	std::cout << "|PAttack is: " << curPAttack << " / " << maxPAttack << std::endl;
+	std::cout << "|MAttack is: " << curMAttack << " / " << maxMAttack << std::endl;
+	std::cout << "|PDefense is: " << curPDefense << " / " << maxPDefense << std::endl;
+	std::cout << "|MDefense is: " << curMDefense << " / " << maxMDefense << std::endl;
+	std::cout << "|Weapon is: " << getWeaponName(equipment.getWeapon()) << std::endl;
+	std::cout << "|Armor is: " << getArmorName(equipment.getArmor()) << std::endl;
+	std::cout << "|Accessory is: " << getAccessoryName(equipment.getAccessory()) << std::endl;
+	std::cout << "|isFlee : " << isFlee << std::endl;
 
-	std::cout << "Active Skills :";
+	std::cout << "|Active Skills : ";
 	for (auto i : activeSkills)
 	{
-		std::cout << getSkillName(i.skillIdx)<< " ";
+		std::cout << getSkillName(i.skillIdx) << " ";
 	}
 	std::cout << std::endl;
-	std::cout << "Passive Skills : ";
+	std::cout << "|Passive Skills : ";
 	for (auto i : passiveSkills)
 	{
 		std::cout << getSkillName(i.skillIdx) << " ";
 	}
 	std::cout << std::endl;
-	std::cout << "Buff : ";
+	std::cout << "|Buff : ";
 	for (auto i : buffs)
 	{
-		std::cout << getBuffName(i.buffIdx) << " , "<<i.turn<<" ";
+		std::cout << getBuffName(i.buffIdx) << " , " << i.turn << " ";
 	}
 	std::cout << std::endl;
+	std::cout << "===================================================" << std::endl;
 }
 

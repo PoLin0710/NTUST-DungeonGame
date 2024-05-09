@@ -13,6 +13,8 @@
 
 class Entity {
 private:
+	std::string name;
+
 	int initVitality;
 	int initFocus;
 	int initSpeed;
@@ -52,7 +54,7 @@ private:
 
 	std::vector<Buff::Buff> buffs;
 public:
-	Entity();
+	Entity(std::string);
 	~Entity();
 
 	void setVitality(int);
@@ -69,7 +71,7 @@ public:
 
 	int getVitality() const;
 	int getFocus() const;
-	int getSpeed() const;
+	int getSpeed();
 	int getHitRate() const;
 	int getPAttack() const;
 	int getMAttack() const;
@@ -82,12 +84,16 @@ public:
 	double RolltheDice(int, int);
 	void update();
 	bool useSkill(int, std::vector<Entity*>, std::vector<Entity*>);
-	int useFocus();
+	int useFocus(int);
 	void heal(int, std::vector<Entity*>);
 	void attack(int, int, std::vector<Entity*>);
 	void insertBuff(int);
 	std::vector<Entity*> chooseEntitys(int, std::vector<Entity*>);
+	bool turnStart();
 	void turnEnd();
+	bool findSkills(SKILL_IDX);
+	bool findBuffs(Buff::BUFF_IDX);
+
 
 	void printInfo();
 };
