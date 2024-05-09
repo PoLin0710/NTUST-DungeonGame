@@ -2,7 +2,7 @@
 
 int Role::money = 600;
 std::vector<Bag> Role::bag = {
-	{BAG_TYPE::EQUIPMENT, ITEM_IDX::IWOODEN_SWORD},
+	/*{BAG_TYPE::EQUIPMENT, ITEM_IDX::IWOODEN_SWORD},
 	{BAG_TYPE::EQUIPMENT, ITEM_IDX::IHAMMER},
 	{BAG_TYPE::EQUIPMENT, ITEM_IDX::IGIANT_HAMMER},
 	{BAG_TYPE::EQUIPMENT, ITEM_IDX::IMAGIC_WAND},
@@ -18,7 +18,7 @@ std::vector<Bag> Role::bag = {
 	{BAG_TYPE::ITEM, ITEM_IDX::IGODSBEARD},
 	{BAG_TYPE::ITEM, ITEM_IDX::IGOLDEN_ROOT},
 	{BAG_TYPE::ITEM, ITEM_IDX::ITELEPORT_SCROLL},
-	{BAG_TYPE::ITEM, ITEM_IDX::ITENT} };
+	{BAG_TYPE::ITEM, ITEM_IDX::ITENT}*/ };
 
 Role::Role(string name) :Entity(name)
 {
@@ -155,7 +155,7 @@ void Role::costMoney(int amount)
 	money -= amount;
 }
 
-int Role::getMoney()
+int& Role::getMoney()
 {
 	return money;
 }

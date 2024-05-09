@@ -2,7 +2,6 @@
 #define _ROLE_H_
 
 #include "Entity.h"
-#include "Item.h"
 
 struct Bag {
 	int type;
@@ -31,7 +30,7 @@ public:
 	void unWearEquipment(int);
 	void addMoney(int);
 	void costMoney(int);
-	int getMoney();
+	int& getMoney();
 	void printBag();
 	void insertBag(vector<int>);
 private:

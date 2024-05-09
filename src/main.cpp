@@ -1,5 +1,6 @@
 ﻿#include "Entity.h"
 #include "Role.h"
+#include "Shop.h"
 
 int main()
 {
@@ -8,6 +9,7 @@ int main()
 	Entity* man4 = new Entity("Player4"), * man5 = new Entity("Player5"), * man6 = new Entity("Player6");
 	std::vector<Entity*> Ent = { man4, man5,man6 };
 	std::vector<Entity*> rol = { man1, man2,man3 };
+	Shop shop;
 	man1->update();
 	man2->update();
 	man3->update();
@@ -17,10 +19,14 @@ int main()
 
 	man1->printInfo();
 	man1->printBag();
-
+	std::cout << "Money: " << man1->getMoney();
+	man1->insertBag(shop.intoShop(man1->getMoney()));
+	std::cout << "Money: " << man1->getMoney() << std::endl;
+	man1->printInfo();
+	man1->printBag();
+	system("pause");
 
 	man4->useSkill(0, Ent, rol);
-	man1->printInfo();
 	man1->useItem(ITEM_IDX::IGODSBEARD, 13);
 	man1->printInfo();
 	man1->printBag();

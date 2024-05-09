@@ -6,7 +6,7 @@
 #include <string>
 #include "Buff.h"
 #include "Equipment.h"
-#include "Item.h"
+#include "Shop.h"
 
 extern std::map<int, std::string> weaponName;
 extern std::map<int, std::string> armorName;
