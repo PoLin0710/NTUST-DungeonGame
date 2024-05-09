@@ -3,9 +3,9 @@
 int main()
 {
 	srand(time(NULL));
-	Entity* man1 = new Entity("Player1"), * man2 = new Entity("Player2"), * man3 = new Entity(("Player3")), * man4 = new Entity("Player4");
-	std::vector<Entity*> Ent = { man2, man4 };
-	std::vector<Entity*> rol = { man1, man3 };
+	Entity* man1 = new Entity("Player1"), * man2 = new Entity("Player2"), * man3 = new Entity(("Player3")), * man4 = new Entity("Player4"), * man5 = new Entity("Player5"), * man6 = new Entity("Player6");
+	std::vector<Entity*> Ent = { man2, man4,man6 };
+	std::vector<Entity*> rol = { man1, man3,man5 };
 	man1->update();
 	man2->update();
 	man3->update();

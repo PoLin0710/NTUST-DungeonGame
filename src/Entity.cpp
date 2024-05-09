@@ -13,7 +13,7 @@ Entity::Entity(std::string _name)
 	this->initPDefense = rand() % 21; // Range [0,20]
 	this->initMDefense = rand() % 21; // Range [0,20]
 
-	this->equipment.setWeapon(WEAPON_IDX::WOODEN_SWORD);
+	this->equipment.setWeapon(WEAPON_IDX::HAMMER);
 	this->equipment.setArmor(ARMOR_IDX::PLATE_ARMOR);
 	this->equipment.setAccessory(ACCESSORY_IDX::ACCESSORY_NONE);
 
@@ -152,7 +152,7 @@ double Entity::RolltheDice(int diceNum, int successNum)
 
 	for (int i = 0; i < diceNum; i++)
 	{
-		if (i < successNum)
+		if (i < successNum || (i == 0 && findSkills(SKILL_IDX::RUN))) //Passtive skill detect
 		{
 			successRate++;
 
@@ -226,6 +226,21 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 			attack(0, this->curMAttack, target);
 
 			this->curHitRate = this->maxHitRate;
+		}
+		else if (getWeapon() == WEAPON_IDX::HAMMER || getWeapon() == WEAPON_IDX::GIANT_HAMMER)
+		{
+			float rate = RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum));
+
+			std::vector<Entity*> Aoe;
+
+			std::copy_if(enemys.begin(), enemys.end(), std::back_inserter(Aoe),
+				[&target](Entity* elem) {
+					return std::find(target.begin(), target.end(), elem) == target.end();
+				});
+
+			attack(0, this->curMAttack, target);
+			attack(0, this->curMAttack * 0.5, Aoe);
+
 		}
 		else
 		{
