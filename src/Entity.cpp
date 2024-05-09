@@ -56,7 +56,7 @@ void Entity::setVitality(int vitality) {
 }
 
 void Entity::setFocus(int focus) {
-	this->curFocus = std::min(focus, this->curFocus);
+	this->curFocus = std::min(focus, this->maxFocus);
 }
 
 void Entity::setSpeed(int speed) {

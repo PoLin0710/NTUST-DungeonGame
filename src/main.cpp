@@ -17,18 +17,16 @@ int main()
 
 	man1->printInfo();
 	man1->printBag();
-	for (int i = 0; i < 12; i++)
-	{
-		man1->wearEquipment(ITEM_IDX::IWOODEN_SWORD + i, 0);
-		man1->printInfo();
-		man2->printBag();
-		system("pause");
-		system("cls");
-	}
 
-	man1->unWearEquipment(METHOD::UNWEAR_ACCESSORY);
+
+	man4->useSkill(0, Ent, rol);
+	man1->printInfo();
+	man1->useItem(ITEM_IDX::IGODSBEARD, 13);
 	man1->printInfo();
 	man1->printBag();
+	man1->useSkill(0, rol, Ent);
+	man1->useSkill(0, rol, Ent);
+	man4->printInfo();
 	std::cout << "\n";
 	int useidx;
 	std::cout << "Choose skills: ";
