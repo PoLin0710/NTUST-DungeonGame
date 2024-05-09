@@ -169,3 +169,18 @@ void Role::printBag()
 	}
 	std::cout << std::endl;
 }
+
+void Role::insertBag(vector<int> item)
+{
+	for (auto i : item)
+	{
+		if (i < 13) //equipment
+		{
+			bag.push_back({ BAG_TYPE::EQUIPMENT,i });
+		}
+		else
+		{
+			bag.push_back({ BAG_TYPE::ITEM,i });
+		}
+	}
+}
