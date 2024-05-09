@@ -223,7 +223,7 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 		{
 			this->curHitRate = this->maxHitRate - 5;
 			this->curMAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum)); //之後更改
-			attack(0, this->curMAttack, target);
+			attack(curSkill.skillIdx, 0, this->curMAttack, target);
 
 			this->curHitRate = this->maxHitRate;
 		}
@@ -238,14 +238,14 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 					return std::find(target.begin(), target.end(), elem) == target.end();
 				});
 
-			attack(0, this->curMAttack, target);
-			attack(0, this->curMAttack * 0.5, Aoe);
+			attack(curSkill.skillIdx, 0, this->curMAttack, target);
+			attack(curSkill.skillIdx, 0, this->curMAttack * 0.5, Aoe);
 
 		}
 		else
 		{
 			this->curPAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum)); //之後更改
-			attack(this->curPAttack, 0, target);
+			attack(curSkill.skillIdx, this->curPAttack, 0, target);
 		}
 	}
 	else
@@ -302,11 +302,7 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 		}
 	}
 
-	auto it = std::find_if(buffs.begin(), buffs.end(), [](const Buff::Buff& buff) {
-		return buff.buffIdx == Buff::BUFF_IDX::BPOISONED;
-		});
-
-	if (it != buffs.end())
+	if (findBuffs(Buff::BUFF_IDX::BPOISONED))
 	{
 		std::cout << "Launch Debuff Poisoned!\n";
 		this->curVitality -= (this->curVitality * 0.1);
@@ -336,8 +332,11 @@ int Entity::useFocus(int diceNum)
 	}
 }
 
-void Entity::attack(int pAttack, int mAttack, std::vector<Entity*> enemys)
+void Entity::attack(int skillIdx, int pAttack, int mAttack, std::vector<Entity*> enemys)
 {
+	std::vector<int> oneSelf = { SKILL_IDX::ATTACK ,SKILL_IDX::FLEE,SKILL_IDX::PROVOKE,SKILL_IDX::HEAL,SKILL_IDX::SPEEDUP, };
+	std::vector<int> allSelf = { SKILL_IDX::SHOCK_BLAST,-1 };
+
 	for (auto i : enemys)
 	{
 		double pDefense = 1 - (i->curPDefense / double(i->curPDefense + 50));
@@ -348,6 +347,24 @@ void Entity::attack(int pAttack, int mAttack, std::vector<Entity*> enemys)
 
 		i->curVitality -= (realPAttack + realMAttack);
 		i->curVitality = std::max(i->curVitality, 0);
+
+		//Passtive skill
+		if ((realPAttack + realMAttack) > 0 && findSkills(SKILL_IDX::DESTROY))
+		{
+			switch (rand() % 3)
+			{
+			case 0:
+				i->setWeapon(WEAPON_IDX::WEAPON_NONE);
+				break;
+			case 1:
+				i->setArmor(ARMOR_IDX::ARMOR_NONE);
+				break;
+			case 2:
+				i->setAccessory(ACCESSORY_IDX::ACCESSORY_NONE);
+			default:
+				break;
+			}
+		}
 	}
 }
 

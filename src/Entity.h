@@ -86,7 +86,7 @@ public:
 	bool useSkill(int, std::vector<Entity*>, std::vector<Entity*>);
 	int useFocus(int);
 	void heal(int, std::vector<Entity*>);
-	void attack(int, int, std::vector<Entity*>);
+	void attack(int, int, int, std::vector<Entity*>);
 	void insertBuff(int);
 	std::vector<Entity*> chooseEntitys(int, std::vector<Entity*>);
 	bool turnStart();
