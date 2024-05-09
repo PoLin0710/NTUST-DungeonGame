@@ -196,6 +196,15 @@ void Entity::update()
 	this->maxPDefense = equipment.getPDefense(this->initPDefense);
 	this->maxMDefense = equipment.getMDefense(this->initMDefense);
 
+	this->curVitality = std::min(this->curVitality, this->maxVitality);
+	this->curFocus = std::min(this->curFocus, this->maxFocus);
+	this->curSpeed = this->maxSpeed;
+	this->curHitRate = this->maxHitRate;
+	this->curPAttack = this->maxPAttack;
+	this->curMAttack = this->maxMAttack;
+	this->curPDefense = this->maxPDefense;
+	this->curMDefense = this->maxMDefense;
+
 	isFlee = false;
 	activeSkills = equipment.getSkills();
 	passiveSkills = equipment.getPassiveSkills();
