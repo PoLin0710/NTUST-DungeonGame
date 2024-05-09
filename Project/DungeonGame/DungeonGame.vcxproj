@@ -28,6 +28,7 @@
     <ClInclude Include="..\..\src\Buff.h" />
     <ClInclude Include="..\..\src\Entity.h" />
     <ClInclude Include="..\..\src\Equipment.h" />
+    <ClInclude Include="..\..\src\Item.h" />
     <ClInclude Include="..\..\src\List.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
