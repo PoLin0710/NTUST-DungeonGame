@@ -97,7 +97,7 @@ private:
 	int maxPDefense = 100;
 	int maxMDefense = 100;
 
-	skill skills[20] = { {SKILL_IDX::ATTACK, SKILLTYPE::ATK, "ATTACK", false, 1, 0},
+	vector<skill> skills = { {SKILL_IDX::ATTACK, SKILLTYPE::ATK, "ATTACK", false, 1, 0},
 						 {SKILL_IDX::FLEE, SKILLTYPE::SP, "FLEE", false, 1, 0},
 						 {SKILL_IDX::PROVOKE, SKILLTYPE::SP, "PROVOKE", false, 1, 2},
 						 {SKILL_IDX::SHOCK_BLAST, SKILLTYPE::ATK, "SHOCK_BLAST", false, 3, 1},
