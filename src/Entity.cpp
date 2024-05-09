@@ -345,6 +345,12 @@ void Entity::attack(int skillIdx, int pAttack, int mAttack, std::vector<Entity*>
 		int realPAttack = pAttack * pDefense;
 		int realMAttack = mAttack * mDefense;
 
+		if (i->findSkills(SKILL_IDX::FORTIFY))
+		{
+			realPAttack *= 0.9;
+			realMAttack *= 0.9;
+		}
+
 		i->curVitality -= (realPAttack + realMAttack);
 		i->curVitality = std::max(i->curVitality, 0);
 
