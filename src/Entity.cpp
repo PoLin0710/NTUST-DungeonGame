@@ -15,7 +15,7 @@ Entity::Entity(std::string _name)
 
 	this->equipment.setWeapon(WEAPON_IDX::HAMMER);
 	this->equipment.setArmor(ARMOR_IDX::PLATE_ARMOR);
-	this->equipment.setAccessory(ACCESSORY_IDX::ACCESSORY_NONE);
+	this->equipment.setAccessory(ACCESSORY_IDX::BRACELET);
 
 	this->equipment.updateEquipment();
 
@@ -52,35 +52,35 @@ Entity::~Entity()
 }
 
 void Entity::setVitality(int vitality) {
-	this->maxVitality = vitality;
+	this->curVitality = std::min(vitality, this->maxVitality);
 }
 
 void Entity::setFocus(int focus) {
-	this->maxFocus = focus;
+	this->curFocus = std::min(focus, this->curFocus);
 }
 
 void Entity::setSpeed(int speed) {
-	this->maxSpeed = speed;
+	this->curSpeed = speed;
 }
 
 void Entity::setHitRate(int hitRate) {
-	this->maxHitRate = hitRate;
+	this->curHitRate = hitRate;
 }
 
 void Entity::setPAttack(int pAttack) {
-	this->maxPAttack = pAttack;
+	this->curPAttack = pAttack;
 }
 
 void Entity::setMAttack(int mAttack) {
-	this->maxMAttack = mAttack;
+	this->curMAttack = mAttack;
 }
 
 void Entity::setPDefense(int pDefense) {
-	this->maxPDefense = pDefense;
+	this->curPDefense = pDefense;
 }
 
 void Entity::setMDefense(int mDefense) {
-	this->maxMDefense = mDefense;
+	this->curMDefense = mDefense;
 }
 
 void Entity::setWeapon(int weapon) {

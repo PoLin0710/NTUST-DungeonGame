@@ -23,6 +23,7 @@
     <ClCompile Include="..\..\src\Equipment.cpp" />
     <ClCompile Include="..\..\src\List.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\Role.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Buff.h" />
@@ -30,6 +31,8 @@
     <ClInclude Include="..\..\src\Equipment.h" />
     <ClInclude Include="..\..\src\Item.h" />
     <ClInclude Include="..\..\src\List.h" />
+    <ClInclude Include="..\..\src\Position.h" />
+    <ClInclude Include="..\..\src\Role.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
