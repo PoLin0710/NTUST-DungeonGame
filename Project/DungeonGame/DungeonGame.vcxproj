@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\Combat.cpp" />
     <ClCompile Include="..\..\src\Entity.cpp" />
     <ClCompile Include="..\..\src\Equipment.cpp" />
     <ClCompile Include="..\..\src\List.cpp" />
@@ -28,12 +29,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Buff.h" />
+    <ClInclude Include="..\..\src\Combat.h" />
     <ClInclude Include="..\..\src\Entity.h" />
     <ClInclude Include="..\..\src\Equipment.h" />
     <ClInclude Include="..\..\src\List.h" />
     <ClInclude Include="..\..\src\Position.h" />
     <ClInclude Include="..\..\src\Role.h" />
     <ClInclude Include="..\..\src\Shop.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\src\combatBoard.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

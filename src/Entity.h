@@ -75,6 +75,7 @@ public:
 	void setArmor(int);
 	void setAccessory(int);
 
+	string getName() const;
 	int getVitality() const;
 	int getFocus() const;
 	int getSpeed();
@@ -87,6 +88,8 @@ public:
 	int getArmor() const;
 	int getAccessory() const;
 	int getType() const;
+	int getActiveSkillSize() const;
+	bool getIsFlee() const;
 
 	double RolltheDice(int, int);
 	void update();

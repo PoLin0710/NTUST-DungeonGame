@@ -46,6 +46,7 @@ Entity::Entity(std::string _name, int type = ENTITY_TYPE::ENEMY)
 
 	this->isFlee = false;
 	this->turn = 0;
+	this->type = type;
 }
 
 Entity::~Entity()
@@ -96,6 +97,11 @@ void Entity::setAccessory(int accessory) {
 	this->equipment.setAccessory(accessory);
 }
 
+
+string Entity::getName() const
+{
+	return name;
+}
 
 int Entity::getVitality() const {
 	return curVitality;
@@ -150,6 +156,16 @@ int Entity::getAccessory() const {
 int Entity::getType() const
 {
 	return type;
+}
+
+int Entity::getActiveSkillSize() const
+{
+	return activeSkills.size();
+}
+
+bool Entity::getIsFlee() const
+{
+	return isFlee;
 }
 
 double Entity::RolltheDice(int diceNum, int successNum)
