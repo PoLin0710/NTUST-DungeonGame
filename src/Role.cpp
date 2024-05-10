@@ -20,7 +20,7 @@ std::vector<Bag> Role::bag = {
 	{BAG_TYPE::ITEM, ITEM_IDX::ITELEPORT_SCROLL},
 	{BAG_TYPE::ITEM, ITEM_IDX::ITENT}*/ };
 
-Role::Role(string name) :Entity(name)
+Role::Role(string name) :Entity(name, ENTITY_TYPE::ROLE)
 {
 }
 

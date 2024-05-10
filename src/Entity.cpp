@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity(std::string _name)
+Entity::Entity(std::string _name, int type = ENTITY_TYPE::ENEMY)
 {
 	this->name = _name;
 

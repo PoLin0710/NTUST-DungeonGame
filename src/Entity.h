@@ -11,8 +11,14 @@
 #include <ctime>
 #include <map>
 
+enum ENTITY_TYPE {
+	ROLE = 0,
+	ENEMY = 1
+};
+
 class Entity {
 private:
+	int type;
 	std::string name;
 
 	int initVitality;
@@ -54,7 +60,7 @@ private:
 
 	std::vector<Buff::Buff> buffs;
 public:
-	Entity(std::string);
+	Entity(std::string, int);
 	~Entity();
 
 	void setVitality(int);
