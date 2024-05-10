@@ -5,7 +5,7 @@ item Shop::getItem(int idx)
 	return items[idx];
 }
 
-vector<int> Shop::intoShop(int money)
+vector<int> Shop::intoShop(int& money)
 {
 	vector<int> purchaseIdx;
 	int idx = 0;

@@ -65,7 +65,7 @@ public:
 
 	item getItem(int idx);
 
-	vector<int> intoShop(int money);
+	vector<int> intoShop(int& money);
 
 	void showShopInfo(int idx);
 };
