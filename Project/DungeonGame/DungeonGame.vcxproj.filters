@@ -15,24 +15,30 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\main.cpp">
+    <ClCompile Include="Map.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Equipment.cpp">
+    <ClCompile Include="Equipment.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Shop.cpp">
+    <ClCompile Include="main.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Shop.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\Equipment.h">
+    <ClInclude Include="Map.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Position.h">
+    <ClInclude Include="Equipment.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Shop.h">
+    <ClInclude Include="Position.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Shop.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

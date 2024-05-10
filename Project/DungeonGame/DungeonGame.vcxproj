@@ -19,14 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Equipment.cpp" />
-    <ClCompile Include="..\..\src\main.cpp" />
-    <ClCompile Include="..\..\src\Shop.cpp" />
+    <ClCompile Include="Equipment.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Shop.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\Equipment.h" />
-    <ClInclude Include="..\..\src\Position.h" />
-    <ClInclude Include="..\..\src\Shop.h" />
+    <ClInclude Include="Equipment.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Position.h" />
+    <ClInclude Include="Shop.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

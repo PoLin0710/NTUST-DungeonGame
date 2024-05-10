@@ -5,6 +5,11 @@ item Shop::getItem(int idx)
 	return items[idx];
 }
 
+char Shop::getIcon()
+{
+	return icon;
+}
+
 vector<int> Shop::intoShop(int& money)
 {
 	vector<int> purchaseIdx;

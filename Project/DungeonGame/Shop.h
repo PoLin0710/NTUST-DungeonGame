@@ -4,6 +4,7 @@
 #include <conio.h>	
 #include <iomanip>
 #include "Position.h"
+
 using namespace std;
 
 struct item
@@ -61,7 +62,11 @@ public:
 
 	Shop() : pos(Position(0, 0)) {}
 
+	Shop(int x, int y) : pos(Position(x, y)) {}
+
 	Shop(Position pos) :pos(pos) {}
+
+	char getIcon();
 
 	item getItem(int idx);
 
