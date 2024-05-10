@@ -96,6 +96,8 @@ public:
 
 
 	void printInfo();
+
+	int turn;
 };
 
 #endif // _ENTITY_H_

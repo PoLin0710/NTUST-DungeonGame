@@ -45,6 +45,7 @@ Entity::Entity(std::string _name)
 	this->curMDefense = this->maxMDefense;
 
 	this->isFlee = false;
+	this->turn = 0;
 }
 
 Entity::~Entity()
@@ -206,6 +207,7 @@ void Entity::update()
 	this->curMDefense = this->maxMDefense;
 
 	isFlee = false;
+	this->turn = 0;
 	activeSkills = equipment.getSkills();
 	passiveSkills = equipment.getPassiveSkills();
 	activeSkillsCD.clear();
