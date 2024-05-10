@@ -61,7 +61,7 @@ private:
 	std::vector<Buff::Buff> buffs;
 public:
 	Entity(std::string, int);
-	~Entity();
+	virtual~Entity();
 
 	void setVitality(int);
 	void setFocus(int);

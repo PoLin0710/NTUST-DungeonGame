@@ -184,3 +184,7 @@ void Role::insertBag(vector<int> item)
 		}
 	}
 }
+
+vector<Bag> Role::getBag() {
+	return bag;
+}

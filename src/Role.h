@@ -33,6 +33,8 @@ public:
 	int& getMoney();
 	void printBag();
 	void insertBag(vector<int>);
+	vector<Bag> getBag();
+
 private:
 	static int money;
 	static vector<Bag> bag;
