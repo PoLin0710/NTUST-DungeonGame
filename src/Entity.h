@@ -86,6 +86,7 @@ public:
 	int getWeapon() const;
 	int getArmor() const;
 	int getAccessory() const;
+	int getType() const;
 
 	double RolltheDice(int, int);
 	void update();

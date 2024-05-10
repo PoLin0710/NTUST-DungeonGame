@@ -147,6 +147,11 @@ int Entity::getAccessory() const {
 	return equipment.getAccessory();
 }
 
+int Entity::getType() const
+{
+	return type;
+}
+
 double Entity::RolltheDice(int diceNum, int successNum)
 {
 	double successRate = 0;
