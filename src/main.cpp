@@ -18,9 +18,10 @@ int main()
 	man5->update();
 	man6->update();
 
+	man1->printInfo();
 
-	Combat combat(rol, Ent);
-	combat.start();
+	//Combat combat(rol, Ent);
+	//.start();
 	//Shop shop;
 
 

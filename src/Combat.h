@@ -3,8 +3,10 @@
 
 #include "Role.h"
 #include "Entity.h"
+#include "IO.h"
 #include <set>
 #include <comip.h>
+
 
 class Combat
 {

@@ -1,5 +1,7 @@
 #include "Combat.h"
 
+
+
 Combat::Combat(vector<Role*> roles, vector<Entity*>enemys)
 {
 	movingOrder.clear();
@@ -96,7 +98,7 @@ bool Combat::update()
 	movingOrder.erase(
 		std::remove_if(movingOrder.begin(), movingOrder.end(),
 			[](const Entity* entity) {
-				return entity->getIsFlee();
+				return entity->getIsFlee() || entity->getVitality() == 0;
 			}),
 		movingOrder.end()
 				);
@@ -203,6 +205,26 @@ void Combat::start()
 {
 	while (true)
 	{
+		const int requiredRows = 50;
+		const int requiredCols = 120;
+		// 重複檢查螢幕大小
+		while (true) {
+			if (checkConsoleSize(requiredRows, requiredCols)) {
+				std::cout << "螢幕大小足夠！" << std::endl;
+				system("cls");
+				printFileAtPosition("combatBoard.txt", 0, 0);
+				SetColor(2);
+				printFileAtPosition("BD1.txt", 5, 0);
+				SetColor();
+				break;
+			}
+			else {
+				std::cerr << "請調整螢幕大小至至少 " << requiredRows << " 行 " << requiredCols << " 列" << std::endl;
+				Sleep(1000); // 等待 3 秒鐘
+			}
+		}
+
+
 		update();
 	}
 }

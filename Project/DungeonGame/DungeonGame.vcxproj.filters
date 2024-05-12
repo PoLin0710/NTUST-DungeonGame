@@ -36,6 +36,9 @@
     <ClCompile Include="..\..\src\Combat.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\IO.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Entity.h">
@@ -62,9 +65,15 @@
     <ClInclude Include="..\..\src\Combat.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\IO.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\src\combatBoard.txt">
+    <Text Include="BD1.txt">
+      <Filter>資源檔</Filter>
+    </Text>
+    <Text Include="combatBoard.txt">
       <Filter>資源檔</Filter>
     </Text>
   </ItemGroup>

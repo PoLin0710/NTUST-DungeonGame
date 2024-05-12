@@ -550,20 +550,25 @@ bool Entity::findBuffs(Buff::BUFF_IDX buffIdx)
 
 void Entity::printInfo()
 {
-	std::cout << "===================================================" << std::endl;
-	std::cout << "|Name is :" << name << std::endl;
-	std::cout << "|Vitality is: " << curVitality << " / " << maxVitality << std::endl;
-	std::cout << "|Focus is: " << curFocus << " / " << maxFocus << std::endl;
-	std::cout << "|Speed is: " << curSpeed << " / " << maxSpeed << std::endl;
-	std::cout << "|HitRate is: " << curHitRate << " / " << maxHitRate << std::endl;
-	std::cout << "|PAttack is: " << curPAttack << " / " << maxPAttack << std::endl;
-	std::cout << "|MAttack is: " << curMAttack << " / " << maxMAttack << std::endl;
-	std::cout << "|PDefense is: " << curPDefense << " / " << maxPDefense << std::endl;
-	std::cout << "|MDefense is: " << curMDefense << " / " << maxMDefense << std::endl;
-	std::cout << "|Weapon is: " << getWeaponName(equipment.getWeapon()) << std::endl;
-	std::cout << "|Armor is: " << getArmorName(equipment.getArmor()) << std::endl;
-	std::cout << "|Accessory is: " << getAccessoryName(equipment.getAccessory()) << std::endl;
-	std::cout << "|isFlee : " << isFlee << std::endl;
+	std::cout << "Name: " << name << std::endl;
+	std::cout << "HP: " << std::left << std::setw(3) << curVitality << "/" << std::left << std::setw(3) << maxVitality << "   ";
+	std::cout << "FOCUS: " << curFocus << "/" << maxFocus << std::endl;
+
+	std::cout << "PATK: " << std::left << std::setw(3) << curPAttack << "     ";
+	std::cout << "PDEF: " << std::left << std::setw(3) << curPDefense << std::endl;
+
+	std::cout << "MATK: " << std::left << std::setw(3) << curMAttack << "     ";
+	std::cout << "MDEF: " << std::left << std::setw(3) << curMDefense << std::endl;
+
+	std::cout << "SPD: " << std::left << std::setw(3) << curSpeed << "      ";
+	std::cout << "HIT: " << std::left << std::setw(3) << curHitRate << std::endl;
+
+	std::cout << "Weapon: " << getWeaponName(equipment.getWeapon()) << std::endl;
+	std::cout << "Armor: " << getArmorName(equipment.getArmor()) << std::endl;
+	std::cout << "Accessory: " << getAccessoryName(equipment.getAccessory()) << std::endl;
+
+
+	/*std::cout << "|isFlee : " << isFlee << std::endl;
 
 	std::cout << "|Active Skills : ";
 	for (auto i : activeSkills)
@@ -583,6 +588,6 @@ void Entity::printInfo()
 		std::cout << getBuffName(i.buffIdx) << " , " << i.turn << " ";
 	}
 	std::cout << std::endl;
-	std::cout << "===================================================" << std::endl;
+	std::cout << "===================================================" << std::endl;*/
 }
 

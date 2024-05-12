@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\src\Combat.cpp" />
     <ClCompile Include="..\..\src\Entity.cpp" />
     <ClCompile Include="..\..\src\Equipment.cpp" />
+    <ClCompile Include="..\..\src\IO.cpp" />
     <ClCompile Include="..\..\src\List.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\Role.cpp" />
@@ -32,13 +33,15 @@
     <ClInclude Include="..\..\src\Combat.h" />
     <ClInclude Include="..\..\src\Entity.h" />
     <ClInclude Include="..\..\src\Equipment.h" />
+    <ClInclude Include="..\..\src\IO.h" />
     <ClInclude Include="..\..\src\List.h" />
     <ClInclude Include="..\..\src\Position.h" />
     <ClInclude Include="..\..\src\Role.h" />
     <ClInclude Include="..\..\src\Shop.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\src\combatBoard.txt" />
+    <Text Include="BD1.txt" />
+    <Text Include="combatBoard.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
