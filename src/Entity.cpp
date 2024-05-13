@@ -390,19 +390,22 @@ int Entity::useFocus(int diceNum)
 
 			if (command == 'A' || command == 'a')
 			{
-				useFocus = useFocus - 1 < 0 ? 0 : useFocus - 1;
-
 				gotoxy(3 + useFocus, 22);
 
 				SetColor(8);
 				std::cout << "*";
+				useFocus = useFocus - 1 < 0 ? 0 : useFocus - 1;
 				SetColor(7);
 
 			}
 			else if (command == 'D' || command == 'd')
 			{
-				useFocus = useFocus + 1 >= maxFocus ? maxFocus : useFocus + 1;
+				if (useFocus >= maxFocus)
+				{
 
+					continue;
+				}
+				useFocus = useFocus >= maxFocus ? maxFocus : useFocus + 1;
 				gotoxy(3 + useFocus - 1, 22);
 
 				SetColor(14);
