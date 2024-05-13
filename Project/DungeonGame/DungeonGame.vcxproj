@@ -42,6 +42,7 @@
   <ItemGroup>
     <Text Include="BD1.txt" />
     <Text Include="combatBoard.txt" />
+    <Text Include="endCombat.txt" />
     <Text Include="interfemce.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

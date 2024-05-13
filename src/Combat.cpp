@@ -142,6 +142,13 @@ bool Combat::update()
 							cout << "->";
 						}
 					}
+
+					gotoxy(2, 26);
+					std::cout << "Open Bag (I)";
+					gotoxy(2, 27);
+					std::cout << "Choose UP (W), DOWN(D)";
+					gotoxy(2, 28);
+					std::cout << "Enter to check!";
 				}
 			}
 			else if (command == 'W' || command == 'w')
@@ -307,6 +314,13 @@ bool Combat::useItem(Entity* role)
 
 		pr++;
 	}
+	gotoxy(2, 26);
+	std::cout << "Back(BackSpace)";
+	gotoxy(2, 27);
+	std::cout << "Choose UP (W), DOWN(D)";
+	gotoxy(2, 28);
+	std::cout << "Enter to check!";
+
 
 	index = 0;
 
@@ -377,7 +391,7 @@ void Combat::start()
 		printFileAtPosition("interfemce.txt", 0, 13);
 		if (!update())
 		{
-			printFileAtPosition("interfemce.txt", 0, 13);
+			printFileAtPosition("endCombat.txt", 0, 13);
 			for (auto i : roles)
 			{
 				if (i->getVitality() == 0 || i->getIsFlee() == true)

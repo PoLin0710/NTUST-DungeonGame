@@ -209,9 +209,10 @@ double Entity::RolltheDice(int diceNum, int successNum)
 				std::cout << "*";
 				SetColor(7);
 			}
+			Sleep(300);
 		}
 
-		Sleep(300);
+
 	}
 	std::cout << "\n";
 
@@ -493,7 +494,6 @@ void Entity::attack(int skillIdx, int pAttack, int mAttack, std::vector<Entity*>
 
 void Entity::insertBuff(int buffIdx)
 {
-	this;
 	Buff::Buff temp;
 	switch (buffIdx)
 	{
@@ -512,8 +512,25 @@ void Entity::insertBuff(int buffIdx)
 	default:
 		break;
 	}
-	this->buffs.push_back(temp);
-	int x = 0;
+
+	bool find = false;
+	for (int i = 0; i < this->buffs.size(); i++)
+	{
+		if (buffs[i].buffIdx == temp.buffIdx)
+		{
+			find = true;
+
+			buffs[i].turn = temp.turn;
+
+			break;
+		}
+	}
+
+	if (!find)
+	{
+		this->buffs.push_back(temp);
+	}
+
 }
 
 void Entity::heal(int mAttack, std::vector<Entity*> enemys)
