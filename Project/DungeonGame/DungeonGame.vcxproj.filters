@@ -76,5 +76,8 @@
     <Text Include="combatBoard.txt">
       <Filter>資源檔</Filter>
     </Text>
+    <Text Include="interfemce.txt">
+      <Filter>資源檔</Filter>
+    </Text>
   </ItemGroup>
 </Project>

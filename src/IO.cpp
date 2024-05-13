@@ -45,7 +45,7 @@ void setConsoleSize(int width, int height) {
 	SetConsoleWindowInfo(hConsole, TRUE, &rect);
 }
 
-void SetColor(int color)
+void SetColor(int color = 7)
 {
 	// Declare
 	HANDLE hConsole;

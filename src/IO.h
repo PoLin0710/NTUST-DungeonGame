@@ -11,4 +11,4 @@ void printFileAtPosition(const std::string& fileName, int startX, int startY);
 
 void setConsoleSize(int width, int height);
 
-void SetColor(int color = 7);
+void SetColor(int color);

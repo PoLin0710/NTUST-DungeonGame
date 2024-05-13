@@ -13,6 +13,8 @@ class Combat
 private:
 	vector<Entity*> roles;
 	vector<Entity*> enemys;
+	map<Entity*, Position> outputXY;
+
 	vector<Entity*> movingOrder;
 	int round;
 public:

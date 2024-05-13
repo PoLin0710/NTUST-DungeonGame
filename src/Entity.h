@@ -4,6 +4,7 @@
 #include "Equipment.h"
 #include "Buff.h"
 #include "List.h"
+#include "IO.h"
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
@@ -91,6 +92,7 @@ public:
 	int getType() const;
 	int getActiveSkillSize() const;
 	bool getIsFlee() const;
+	std::vector<skill> getActiveSkills() const;
 
 	double RolltheDice(int, int);
 	void update();
@@ -106,7 +108,8 @@ public:
 	bool findBuffs(Buff::BUFF_IDX);
 
 
-	void printInfo();
+	void printInfo(int, int);
+	void printSkills(int, int);
 
 	int turn;
 };
