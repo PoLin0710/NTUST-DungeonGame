@@ -20,6 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="RandomEvent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Position.h" />
+    <ClInclude Include="RandomEvent.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

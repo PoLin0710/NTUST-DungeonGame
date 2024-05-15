@@ -18,5 +18,16 @@
     <ClCompile Include="..\..\src\main.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="RandomEvent.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RandomEvent.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Position.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
