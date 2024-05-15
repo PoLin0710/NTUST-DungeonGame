@@ -210,6 +210,10 @@ vector<skill> Equipment::getSkills()
 	{
 		vecSkill.push_back(skills[SKILL_IDX::SHOCK_BLAST]);
 	}
+	else if (weapon == WEAPON_IDX::ELUCIDATOR_DARK_REPULSER)
+	{
+		vecSkill.push_back(skills[SKILL_IDX::STARBURST_STREAM]);
+	}
 
 	//Armor
 	if (armor == ARMOR_IDX::WOODEN_SHIELD)
@@ -237,12 +241,15 @@ vector<skill> Equipment::getPassiveSkills()
 	//Weapon
 	if (weapon == WEAPON_IDX::HAMMER)
 	{
-		vecSkill.push_back(skills[SKILL_IDX::DESTROY]);
 		vecSkill.push_back(skills[SKILL_IDX::HAMMER_SPLASH]);
 	}
 	else if (weapon == WEAPON_IDX::GIANT_HAMMER)
 	{
 		vecSkill.push_back(skills[SKILL_IDX::HAMMER_SPLASH]);
+	}
+	else if (weapon == WEAPON_IDX::ELUCIDATOR_DARK_REPULSER)
+	{
+		vecSkill.push_back(skills[SKILL_IDX::DESTROY]);
 	}
 
 	//Armor

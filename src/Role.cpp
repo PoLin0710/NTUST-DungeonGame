@@ -20,8 +20,11 @@ std::vector<Bag> Role::bag = {
 	{BAG_TYPE::ITEM, ITEM_IDX::ITELEPORT_SCROLL},
 	{BAG_TYPE::ITEM, ITEM_IDX::ITENT} };
 
-Role::Role(string name) :Entity(name, ENTITY_TYPE::ROLE)
+Role::Role(string name, char icon) :Entity(name, ENTITY_TYPE::ROLE, icon)
 {
+	this->setWeapon(rand() % WEAPON_IDX::ELUCIDATOR_DARK_REPULSER + 1);
+	this->setArmor(rand() % ARMOR_IDX::LAUREL_WREATH + 1);
+	this->setAccessory(rand() % ACCESSORY_IDX::BRACELET + 1);
 }
 
 Role::~Role()

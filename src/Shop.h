@@ -4,6 +4,7 @@
 #include <conio.h>	
 #include <iomanip>
 #include "Position.h"
+#include "IO.h"
 using namespace std;
 
 struct item
@@ -31,7 +32,8 @@ enum ITEM_IDX
 	IGODSBEARD = 13,
 	IGOLDEN_ROOT = 14,
 	ITELEPORT_SCROLL = 15,
-	ITENT = 16
+	ITENT = 16,
+	IElucidator_Dark_Repulser = 17
 };
 
 class Shop
@@ -55,17 +57,23 @@ private:
 						   {"Godsbeard", 300, "A rare herb with healing properties."},
 						   {"Golden root", 500, "A Valuable and Magical Golden Root."},
 						   {"Teleport scroll", 500, "A Scroll Used for Teleportation to Specific Locations."},
-						   {"Tent", 500, "A Portable Shelter for Resting or Camping."} };
+						   {"Tent", 500, "A Portable Shelter for Resting or Camping."} ,
+						   {"Elucidator & Dark_Repulser", 2000, "A pair of swords comprised of the Black Sword and the White Sword. Can use skill Starburst Stream."} };
 
 public:
 
 	Shop() : pos(Position(0, 0)) {}
 
+	Shop(int x, int y) : pos(Position(x, y)) {}
+
 	Shop(Position pos) :pos(pos) {}
+
+	char getIcon();
 
 	item getItem(int idx);
 
 	vector<int> intoShop(int& money);
 
-	void showShopInfo(int idx);
+	void showShopInfo(int idx, int& money);
+
 };

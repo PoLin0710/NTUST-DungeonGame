@@ -5,6 +5,11 @@ item Shop::getItem(int idx)
 	return items[idx];
 }
 
+char Shop::getIcon()
+{
+	return icon;
+}
+
 vector<int> Shop::intoShop(int& money)
 {
 	vector<int> purchaseIdx;
@@ -12,13 +17,13 @@ vector<int> Shop::intoShop(int& money)
 
 	while (true)
 	{
-		showShopInfo(idx);
+		showShopInfo(idx, money);
 		char input = _getch();
 
 		if (input == 'W' || input == 'w')
 		{
 			if (idx <= 0) {
-				idx = 16;
+				idx = 17;
 			}
 			else {
 				idx--;
@@ -27,7 +32,7 @@ vector<int> Shop::intoShop(int& money)
 
 		if (input == 'S' || input == 's')
 		{
-			if (idx >= 16) {
+			if (idx >= 17) {
 				idx = 0;
 			}
 			else {
@@ -52,7 +57,7 @@ vector<int> Shop::intoShop(int& money)
 	}
 }
 
-void Shop::showShopInfo(int idx)
+void Shop::showShopInfo(int idx, int& money)
 {
 	system("CLS");
 	static int upIdx = 0, downIdx = 9;
@@ -68,14 +73,21 @@ void Shop::showShopInfo(int idx)
 		downIdx = idx;
 		upIdx = idx - 9;
 	}
-
-	cout << "         Item              Price\n";
+	cout << "Money : " << money << "\n";
+	cout << "         Item                                                          Price\n";
 
 	for (int i = upIdx; i <= downIdx; i++)
 	{
-		cout << setw(5) << ((i == idx) ? "*" : "") << items[i].name
-			<< setw(16 - items[i].name.length()) << ""
-			<< setw(10) << items[i].price << "\n";
+		SetColor(7);
+		cout << setw(5) << ((i == idx) ? "-> " : "  ") << setw(30) << left << items[i].name;
+
+		if (items[i].price > money)
+		{
+			SetColor(12);
+		}
+		cout << setw(40) << right << items[i].price << "$\n";
+
+		SetColor(7);
 	}
 
 	cout << "\n\n";

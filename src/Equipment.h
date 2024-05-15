@@ -11,7 +11,8 @@ enum WEAPON_IDX
 	HAMMER = 2,
 	GIANT_HAMMER = 3,
 	MAGIC_WAND = 4,
-	RITUAL_SWORD = 5
+	RITUAL_SWORD = 5,
+	ELUCIDATOR_DARK_REPULSER = 6
 };
 
 enum ARMOR_IDX
@@ -97,7 +98,7 @@ private:
 	int maxPDefense = 100;
 	int maxMDefense = 100;
 
-	skill skills[20] = { {SKILL_IDX::ATTACK, SKILLTYPE::ATK, "ATTACK", false, 1, 0},
+	vector<skill> skills = { {SKILL_IDX::ATTACK, SKILLTYPE::ATK, "ATTACK", false, 1, 0},
 						 {SKILL_IDX::FLEE, SKILLTYPE::SP, "FLEE", false, 1, 0},
 						 {SKILL_IDX::PROVOKE, SKILLTYPE::SP, "PROVOKE", false, 1, 2},
 						 {SKILL_IDX::SHOCK_BLAST, SKILLTYPE::ATK, "SHOCK_BLAST", false, 3, 1},
@@ -107,7 +108,7 @@ private:
 						 {SKILL_IDX::HAMMER_SPLASH, SKILLTYPE::ATK, "HAMMER_SPLASH", true, 0, 0},
 						 {SKILL_IDX::DESTROY, SKILLTYPE::SP, "DESTROY", true, 0, 0},
 						 {SKILL_IDX::FORTIFY, SKILLTYPE::SP, "FORTIFY", true, 0, 5},
-						 {SKILL_IDX::STARBURST_STREAM, SKILLTYPE::SP, "STARBURST_STREAM", false, 16, 10} };
+						 {SKILL_IDX::STARBURST_STREAM, SKILLTYPE::ATK, "STARBURST_STREAM", false, 16, 10} };
 
 	int diceNum;	//number of dice 
 	int cd;			//cool down time

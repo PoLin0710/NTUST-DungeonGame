@@ -1,8 +1,9 @@
 #include "Entity.h"
 
-Entity::Entity(std::string _name, int type = ENTITY_TYPE::ENEMY)
+Entity::Entity(std::string _name, int type = ENTITY_TYPE::ENEMY, char icon = 'E')
 {
 	this->name = _name;
+	this->eicon = icon;
 
 	this->initVitality = 30 + rand() % 15; // Range [30,45)
 	this->initFocus = 3;
@@ -97,6 +98,11 @@ void Entity::setAccessory(int accessory) {
 	this->equipment.setAccessory(accessory);
 }
 
+void Entity::setIcon(char _icon)
+{
+	this->eicon = _icon;
+}
+
 
 string Entity::getName() const
 {
@@ -176,6 +182,11 @@ std::vector<skill> Entity::getActiveSkills() const
 bool Entity::isDizziness()
 {
 	return findBuffs(Buff::BUFF_IDX::BDIZZINESS);
+}
+
+char Entity::getIcon() const
+{
+	return eicon;
 }
 
 double Entity::RolltheDice(int diceNum, int successNum)

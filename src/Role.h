@@ -22,7 +22,7 @@ enum METHOD {
 class Role :public Entity
 {
 public:
-	Role(string);
+	Role(string, char);
 	~Role();
 
 	void useItem(int, int);

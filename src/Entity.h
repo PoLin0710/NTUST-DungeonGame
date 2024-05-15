@@ -2,6 +2,7 @@
 #define _ENTITY_H_
 
 #include "Equipment.h"
+#include "Position.h"
 #include "Buff.h"
 #include "List.h"
 #include "IO.h"
@@ -22,6 +23,7 @@ class Entity {
 private:
 	int type;
 	std::string name;
+	char eicon;
 
 	int initVitality;
 	int initFocus;
@@ -62,7 +64,7 @@ private:
 
 	std::vector<Buff::Buff> buffs;
 public:
-	Entity(std::string, int);
+	Entity(std::string, int, char);
 	virtual~Entity();
 
 	void setVitality(int);
@@ -76,6 +78,7 @@ public:
 	void setWeapon(int);
 	void setArmor(int);
 	void setAccessory(int);
+	void setIcon(char);
 
 	string getName() const;
 	int getVitality() const;
@@ -94,6 +97,7 @@ public:
 	bool getIsFlee() const;
 	std::vector<skill> getActiveSkills() const;
 	bool isDizziness();
+	char getIcon()const;
 
 	double RolltheDice(int, int);
 	void update();
@@ -114,6 +118,7 @@ public:
 	void printSkills(int, int);
 
 	int turn;
+	Position ePos;
 };
 
 #endif // _ENTITY_H_
