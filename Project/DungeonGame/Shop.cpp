@@ -23,7 +23,7 @@ vector<int> Shop::intoShop(int& money)
 		if (input == 'W' || input == 'w')
 		{
 			if (idx <= 0) {
-				idx = 16;
+				idx = 17;
 			}
 			else {
 				idx--;
@@ -32,7 +32,7 @@ vector<int> Shop::intoShop(int& money)
 
 		if (input == 'S' || input == 's')
 		{
-			if (idx >= 16) {
+			if (idx >= 17) {
 				idx = 0;
 			}
 			else {
@@ -78,9 +78,8 @@ void Shop::showShopInfo(int idx)
 
 	for (int i = upIdx; i <= downIdx; i++)
 	{
-		cout << setw(5) << ((i == idx) ? "*" : "") << items[i].name
-			<< setw(16 - items[i].name.length()) << ""
-			<< setw(10) << items[i].price << "\n";
+		cout << setw(30) << left << ((i == idx) ? "* " + items[i].name : items[i].name)
+			<< setw(40) << right << items[i].price << "$\n";
 	}
 
 	cout << "\n\n";

@@ -56,8 +56,8 @@ private:
 						   {"Godsbeard", 300, "A rare herb with healing properties."},
 						   {"Golden root", 500, "A Valuable and Magical Golden Root."},
 						   {"Teleport scroll", 500, "A Scroll Used for Teleportation to Specific Locations."},
-						   {"Tent", 500, "A Portable Shelter for Resting or Camping."} };
-
+						   {"Tent", 500, "A Portable Shelter for Resting or Camping."} ,
+						   {"Elucidator & Dark_Repulser", 2000, "A pair of swords comprised of the Black Sword and the White Sword. Can use skill Starburst Stream."} };
 public:
 
 	Shop() : pos(Position(0, 0)) {}
