@@ -173,6 +173,11 @@ std::vector<skill> Entity::getActiveSkills() const
 	return activeSkills;
 }
 
+bool Entity::isDizziness()
+{
+	return findBuffs(Buff::BUFF_IDX::BDIZZINESS);
+}
+
 double Entity::RolltheDice(int diceNum, int successNum)
 {
 	double successRate = 0;
@@ -297,6 +302,11 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 				Aoe.end()
 						);
 
+			if (rate == 1)
+			{
+				target[0]->insertBuff(Buff::BUFF_IDX::BDIZZINESS);
+			}
+
 			attack(curSkill.skillIdx, 0, this->curMAttack, target);
 			attack(curSkill.skillIdx, 0, this->curMAttack * 0.5, Aoe);
 
@@ -391,26 +401,44 @@ int Entity::useFocus(int diceNum)
 
 			if (command == 'A' || command == 'a')
 			{
-				gotoxy(3 + useFocus, 22);
+				gotoxy(3, 22);
 
-				SetColor(8);
-				std::cout << "*";
 				useFocus = useFocus - 1 < 0 ? 0 : useFocus - 1;
+
+				for (int i = 0; i < diceNum; i++)
+				{
+					if (i < useFocus)
+					{
+						SetColor(14);
+					}
+					else
+					{
+						SetColor(8);
+					}
+					std::cout << "*";
+				}
+
 				SetColor(7);
 
 			}
 			else if (command == 'D' || command == 'd')
 			{
-				if (useFocus >= maxFocus)
-				{
-
-					continue;
-				}
+				gotoxy(3, 22);
 				useFocus = useFocus >= maxFocus ? maxFocus : useFocus + 1;
-				gotoxy(3 + useFocus - 1, 22);
 
-				SetColor(14);
-				std::cout << "*";
+				for (int i = 0; i < diceNum; i++)
+				{
+					if (i < useFocus)
+					{
+						SetColor(14);
+					}
+					else
+					{
+						SetColor(8);
+					}
+					std::cout << "*";
+				}
+
 				SetColor(7);
 
 			}

@@ -101,7 +101,14 @@ bool Combat::update()
 	gotoxy(2, 15);
 	cout << "Turns : ";
 	for (auto it = movingOrder.begin(); it != movingOrder.end(); ++it) {
+		if ((*it)->isDizziness())
+		{
+			SetColor(8);
+		}
 		cout << (*it)->getName();
+
+		SetColor(7);
+
 		if (it != movingOrder.end() - 1) {
 			cout << "->";
 		}
@@ -114,7 +121,7 @@ bool Combat::update()
 	gotoxy(2, 26);
 	std::cout << "Open Bag (I)";
 
-	while (!isMove)
+	while (!isMove && !curEntity->isDizziness())
 	{
 		if (curEntity->getType() == ENTITY_TYPE::ROLE)
 		{
@@ -187,7 +194,14 @@ bool Combat::update()
 					gotoxy(2, 15);
 					cout << "Turns : ";
 					for (auto it = movingOrder.begin(); it != movingOrder.end(); ++it) {
+						if ((*it)->isDizziness())
+						{
+							SetColor(8);
+						}
 						cout << (*it)->getName();
+
+						SetColor(7);
+
 						if (it != movingOrder.end() - 1) {
 							cout << "->";
 						}

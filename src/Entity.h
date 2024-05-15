@@ -93,6 +93,7 @@ public:
 	int getActiveSkillSize() const;
 	bool getIsFlee() const;
 	std::vector<skill> getActiveSkills() const;
+	bool isDizziness();
 
 	double RolltheDice(int, int);
 	void update();
