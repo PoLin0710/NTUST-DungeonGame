@@ -15,7 +15,7 @@ Entity::Entity(std::string _name, int type = ENTITY_TYPE::ENEMY)
 
 	this->equipment.setWeapon(WEAPON_IDX::HAMMER);
 	this->equipment.setArmor(ARMOR_IDX::PLATE_ARMOR);
-	this->equipment.setAccessory(ACCESSORY_IDX::BRACELET);
+	this->equipment.setAccessory(ACCESSORY_IDX::SHOES);
 
 	this->equipment.updateEquipment();
 
@@ -185,7 +185,7 @@ double Entity::RolltheDice(int diceNum, int successNum)
 
 	for (int i = 0; i < diceNum; i++)
 	{
-		if (i < successNum || (i == 0 && findSkills(SKILL_IDX::RUN))) //Passtive skill detect
+		if (i < successNum + findSkills(SKILL_IDX::RUN)) //Passtive skill detect
 		{
 			successRate++;
 
@@ -233,6 +233,8 @@ double Entity::RolltheDice(int diceNum, int successNum)
 //¾Ô°««eÄ²µo
 void Entity::update()
 {
+	equipment.updateEquipment();
+
 	this->maxVitality = equipment.getVitality(this->initVitality);
 	this->maxFocus = equipment.getFocus(this->initFocus);
 	this->maxSpeed = equipment.getSpeed(this->initSpeed);
@@ -259,6 +261,65 @@ void Entity::update()
 	passiveSkillsCD.clear();
 	activeSkillsCD.resize(activeSkills.size(), 0);
 	passiveSkillsCD.resize(passiveSkills.size(), 0);
+}
+
+void Entity::combatUpdate()
+{
+	equipment.updateEquipment();
+
+	this->maxVitality = equipment.getVitality(this->initVitality);
+	this->maxFocus = equipment.getFocus(this->initFocus);
+	this->maxSpeed = equipment.getSpeed(this->initSpeed);
+	this->maxHitRate = equipment.getHitRate(this->initHitRate);
+	this->maxPAttack = equipment.getPAttack(this->initPAttack);
+	this->maxMAttack = equipment.getMAttack(this->initMAttack);
+	this->maxPDefense = equipment.getPDefense(this->initPDefense);
+	this->maxMDefense = equipment.getMDefense(this->initMDefense);
+
+	this->curVitality = min(this->curVitality, this->maxVitality);
+	this->curFocus = min(this->curFocus, this->maxFocus);
+	this->curSpeed = this->maxSpeed;
+	this->curHitRate = this->maxHitRate;
+	this->curPAttack = this->maxPAttack;
+	this->curMAttack = this->maxMAttack;
+	this->curPDefense = this->maxPDefense;
+	this->curMDefense = this->maxMDefense;
+
+	std::map<int, int> activeSkillsCDTemp;
+	std::map<int, int> passiveSkillsCDTemp;
+
+
+	int index = 0;
+	for (auto i : activeSkills)
+	{
+		activeSkillsCDTemp[i.skillIdx] = activeSkillsCD[index++];
+	}
+
+	index = 0;
+	for (auto i : passiveSkills)
+	{
+		passiveSkillsCDTemp[i.skillIdx] = passiveSkillsCD[index++];
+	}
+
+	activeSkills = equipment.getSkills();
+	passiveSkills = equipment.getPassiveSkills();
+
+	activeSkillsCD.clear();
+	passiveSkillsCD.clear();
+	activeSkillsCD.resize(activeSkills.size(), 0);
+	passiveSkillsCD.resize(passiveSkills.size(), 0);
+
+	index = 0;
+	for (auto i : activeSkills)
+	{
+		activeSkillsCD[index++] = activeSkillsCDTemp[i.skillIdx];
+	}
+
+	index = 0;
+	for (auto i : passiveSkills)
+	{
+		passiveSkillsCD[index++] = passiveSkillsCDTemp[i.skillIdx];
+	}
 }
 
 bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Entity*> enemys)
@@ -378,18 +439,26 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 int Entity::useFocus(int diceNum)
 {
 	int useFocus = 0;
-	int maxFocus = min(curFocus, diceNum);
+	int maxFocus = max(0, min(curFocus + findSkills(SKILL_IDX::RUN), diceNum - findSkills(SKILL_IDX::RUN)));
 
 
 	gotoxy(3, 21);
 	std::cout << "Focus";
 
 	gotoxy(3, 22);
-	SetColor(8);
 	for (int i = 0; i < diceNum; i++)
 	{
+		if (i == 0 && findSkills(SKILL_IDX::RUN))
+		{
+			SetColor(14);
+		}
+		else
+		{
+			SetColor(8);
+		}
 		std::cout << "*";
 	}
+
 	SetColor(7);
 
 	if (type == ENTITY_TYPE::ROLE)
@@ -407,7 +476,7 @@ int Entity::useFocus(int diceNum)
 
 				for (int i = 0; i < diceNum; i++)
 				{
-					if (i < useFocus)
+					if (i < useFocus || (findSkills(SKILL_IDX::RUN) && i < useFocus + 1))
 					{
 						SetColor(14);
 					}
@@ -428,7 +497,7 @@ int Entity::useFocus(int diceNum)
 
 				for (int i = 0; i < diceNum; i++)
 				{
-					if (i < useFocus)
+					if (i < useFocus || (findSkills(SKILL_IDX::RUN) && i < useFocus + 1))
 					{
 						SetColor(14);
 					}
@@ -454,9 +523,9 @@ int Entity::useFocus(int diceNum)
 
 		gotoxy(3, 22);
 
-		for (int i = 0; i < randomFocus; i++)
+		for (int i = 0; i < maxFocus; i++)
 		{
-			if (i < maxFocus)
+			if (i < randomFocus + findSkills(SKILL_IDX::RUN))
 			{
 				SetColor(14);
 			}
@@ -501,9 +570,31 @@ void Entity::attack(int skillIdx, int pAttack, int mAttack, std::vector<Entity*>
 		i->curVitality = max(i->curVitality, 0);
 
 		//Passtive skill
-		if ((realPAttack + realMAttack) > 0 && findSkills(SKILL_IDX::DESTROY))
+		if ((realPAttack + realMAttack) > 0 && findSkills(SKILL_IDX::DESTROY) && enemys.size() == 1)
 		{
-			switch (rand() % 3)
+			std::vector<int> equipmentTemp;
+
+			if (i->getWeapon() != WEAPON_IDX::WEAPON_NONE)
+			{
+				equipmentTemp.push_back(0);
+			}
+
+			if (i->getArmor() != ARMOR_IDX::ARMOR_NONE)
+			{
+				equipmentTemp.push_back(1);
+			}
+
+			if (i->getAccessory() != ACCESSORY_IDX::ACCESSORY_NONE)
+			{
+				equipmentTemp.push_back(2);
+			}
+
+			if (equipmentTemp.size() == 0)
+			{
+				continue;
+			}
+
+			switch (equipmentTemp[rand() % equipmentTemp.size()])
 			{
 			case 0:
 				i->setWeapon(WEAPON_IDX::WEAPON_NONE);
@@ -516,7 +607,10 @@ void Entity::attack(int skillIdx, int pAttack, int mAttack, std::vector<Entity*>
 			default:
 				break;
 			}
+
+			i->combatUpdate();
 		}
+
 	}
 }
 
@@ -748,25 +842,25 @@ void Entity::printInfo(int x, int y)
 	std::cout << "FOCUS: " << curFocus << "/" << maxFocus << std::endl;
 
 	gotoxy(x, y + 2);
-	std::cout << "PATK: " << std::left << std::setw(3) << curPAttack << "     ";
-	std::cout << "PDEF: " << std::left << std::setw(3) << curPDefense << std::endl;
+	std::cout << "PATK: " << std::left << std::setw(3) << maxPAttack << "     ";
+	std::cout << "PDEF: " << std::left << std::setw(3) << maxPDefense << std::endl;
 
 	gotoxy(x, y + 3);
-	std::cout << "MATK: " << std::left << std::setw(3) << curMAttack << "     ";
-	std::cout << "MDEF: " << std::left << std::setw(3) << curMDefense << std::endl;
+	std::cout << "MATK: " << std::left << std::setw(3) << maxMAttack << "     ";
+	std::cout << "MDEF: " << std::left << std::setw(3) << maxMDefense << std::endl;
 
 	gotoxy(x, y + 4);
-	std::cout << "SPD: " << std::left << std::setw(3) << curSpeed << "      ";
-	std::cout << "HIT: " << std::left << std::setw(3) << curHitRate << std::endl;
+	std::cout << "SPD: " << std::left << std::setw(3) << maxSpeed << "      ";
+	std::cout << "HIT: " << std::left << std::setw(3) << maxHitRate << std::endl;
 
 	gotoxy(x, y + 5);
-	std::cout << "Weapon: " << getWeaponName(equipment.getWeapon()) << std::endl;
+	std::cout << "Weapon: " << std::left << std::setw(20) << getWeaponName(equipment.getWeapon()) << std::endl;
 
 	gotoxy(x, y + 6);
-	std::cout << "Armor: " << getArmorName(equipment.getArmor()) << std::endl;
+	std::cout << "Armor: " << std::left << std::setw(20) << getArmorName(equipment.getArmor()) << std::endl;
 
 	gotoxy(x, y + 7);
-	std::cout << "Accessory: " << getAccessoryName(equipment.getAccessory()) << std::endl;
+	std::cout << "Accessory: " << std::left << std::setw(20) << getAccessoryName(equipment.getAccessory()) << std::endl;
 
 	gotoxy(x, y + 8);
 

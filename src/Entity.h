@@ -97,6 +97,7 @@ public:
 
 	double RolltheDice(int, int);
 	void update();
+	void combatUpdate();
 	bool useSkill(int, std::vector<Entity*>, std::vector<Entity*>);
 	int useFocus(int);
 	void heal(int, std::vector<Entity*>);

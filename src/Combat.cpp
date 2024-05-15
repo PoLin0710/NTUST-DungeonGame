@@ -58,6 +58,7 @@ bool Combat::update()
 
 	Entity* curEntity = movingOrder[0];
 	curEntity->turn++;
+	curEntity->turnStart();
 	bool isMove = false;
 	int index = 0;
 
