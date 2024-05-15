@@ -194,7 +194,7 @@ vector<skill> Equipment::getSkills()
 	vecSkill.push_back(skills[SKILL_IDX::FLEE]);
 
 	//Weapon
-	if (weapon == WEAPON_IDX::WOODEN_SWORD){
+	if (weapon == WEAPON_IDX::WOODEN_SWORD) {
 		vecSkill.push_back(skills[SKILL_IDX::SPEEDUP]);
 	}
 	else if (weapon == WEAPON_IDX::HAMMER)
@@ -222,7 +222,7 @@ vector<skill> Equipment::getSkills()
 	{
 		vecSkill.push_back(skills[SKILL_IDX::HEAL]);
 	}
-	
+
 	sort(vecSkill.begin(), vecSkill.end(), compareSkill);
 	auto it = std::unique(vecSkill.begin(), vecSkill.end(), equalSkill);
 	vecSkill.erase(it, vecSkill.end());
@@ -255,7 +255,7 @@ vector<skill> Equipment::getPassiveSkills()
 	}
 
 	//Accessory
-	else if (accessory == ACCESSORY_IDX::SHOES)
+	if (accessory == ACCESSORY_IDX::SHOES)
 	{
 		vecSkill.push_back(skills[SKILL_IDX::RUN]);
 	}
