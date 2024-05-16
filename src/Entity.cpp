@@ -383,6 +383,14 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 			attack(curSkill.skillIdx, 0, this->curMAttack * 0.5, Aoe);
 
 		}
+		else if (getWeapon() == WEAPON_IDX::ELUCIDATOR_DARK_REPULSER)
+		{
+			this->curPAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum), 3, 22);
+
+			target[0]->insertBuff(Buff::BUFF_IDX::BPOISONED);
+
+			attack(curSkill.skillIdx, 0, this->curMAttack, target);
+		}
 		else
 		{
 			this->curPAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum), 3, 22); //之後更改
@@ -530,7 +538,7 @@ int Entity::useFocus(int diceNum)
 	}
 	else
 	{
-		int randomFocus = rand() % maxFocus;
+		int randomFocus = maxFocus == 0 ? 0 : rand() % maxFocus;
 
 		gotoxy(3, 22);
 

@@ -18,7 +18,9 @@ std::vector<Bag> Role::bag = {
 	{BAG_TYPE::ITEM, ITEM_IDX::IGODSBEARD},
 	{BAG_TYPE::ITEM, ITEM_IDX::IGOLDEN_ROOT},
 	{BAG_TYPE::ITEM, ITEM_IDX::ITELEPORT_SCROLL},
-	{BAG_TYPE::ITEM, ITEM_IDX::ITENT} };
+	{BAG_TYPE::ITEM, ITEM_IDX::ITENT},
+	{BAG_TYPE::EQUIPMENT, ITEM_IDX::IElucidator_Dark_Repulser}
+};
 
 Role::Role(string name, char icon) :Entity(name, ENTITY_TYPE::ROLE, icon)
 {
@@ -77,13 +79,23 @@ void Role::wearEquipment(int equipmentIdx, int bagIdx)
 	case ITEM_IDX::IGIANT_HAMMER:
 	case ITEM_IDX::IMAGIC_WAND:
 	case ITEM_IDX::IRITUAL_SWORD:
+	case ITEM_IDX::IElucidator_Dark_Repulser:
 		weapon = this->getWeapon();
 		if (weapon != WEAPON_IDX::WEAPON_NONE)
 		{
 			bag.erase(bag.begin() + bagIdx);
-			bag.push_back({ BAG_TYPE::EQUIPMENT ,weapon - 1 });
+			if (equipmentIdx != ITEM_IDX::IElucidator_Dark_Repulser)
+			{
+				bag.push_back({ BAG_TYPE::EQUIPMENT ,weapon - 1 });
+				this->setWeapon(equipmentIdx + 1);
+			}
+			else
+			{
+				bag.push_back({ BAG_TYPE::EQUIPMENT ,6 });
+				this->setWeapon(6);
+			}
 		}
-		this->setWeapon(equipmentIdx + 1);
+
 		break;
 		// Armor
 	case ITEM_IDX::IWOODEN_SHIELD:
@@ -114,6 +126,8 @@ void Role::wearEquipment(int equipmentIdx, int bagIdx)
 	default:
 		break;
 	}
+
+	update();
 }
 
 void Role::unWearEquipment(int method)
@@ -148,6 +162,8 @@ void Role::unWearEquipment(int method)
 	default:
 		break;
 	}
+
+	update();
 }
 
 void Role::addMoney(int amount)
@@ -179,7 +195,7 @@ void Role::insertBag(vector<int> item)
 {
 	for (auto i : item)
 	{
-		if (i < 13) //equipment
+		if (i < 13 || i == 17) //equipment
 		{
 			bag.push_back({ BAG_TYPE::EQUIPMENT,i });
 		}

@@ -64,7 +64,8 @@ std::map<int, string> ItemName = {
 		{ITEM_IDX::IGODSBEARD, "GODSBEARD"},
 		{ITEM_IDX::IGOLDEN_ROOT, "GOLDEN_ROOT"},
 		{ITEM_IDX::ITELEPORT_SCROLL, "TELEPORT_SCROLL"},
-		{ITEM_IDX::ITENT, "TENT"}
+		{ITEM_IDX::ITENT, "TENT"},
+		{ITEM_IDX::IElucidator_Dark_Repulser, "ELUCIDATOR_REPULSER"}
 };
 
 std::string getWeaponName(int idx)

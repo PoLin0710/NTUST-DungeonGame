@@ -845,6 +845,21 @@ void Game::start()
 			gotoxy(0, 41);
 		}
 
+		bool end = true;
+
+		for (auto i : roles)
+		{
+			if (i->getVitality() > 0)
+			{
+				end = false;
+			}
+		}
+
+		if (end)
+		{
+			break;
+		}
+
 	}
 
 }
@@ -1208,8 +1223,48 @@ bool Game::useItem()
 
 				}
 			}
+			else if (tempBag[index].type == BAG_TYPE::ITEM)
+			{
+				now->useItem(temp[index].second, temp[index].first);
+			}
+			else if (tempBag[index].type == BAG_TYPE::EQUIPMENT)
+			{
+				now->wearEquipment(temp[index].second, temp[index].first);
 
-			now->useItem(temp[index].second, temp[index].first);
+			}
+
+			if (now->getName() == "Role 1")
+			{
+				SetColor(10);
+				printFileAtPosition("BD1.txt", 5, 28);
+				SetColor(7);
+				roles[0]->printInfo(6, 29);
+			}
+			else if (now->getName() == "Role 2")
+			{
+				SetColor(10);
+				printFileAtPosition("BD1.txt", 43, 28);
+				SetColor(7);
+				roles[1]->printInfo(44, 29);
+			}
+			else if (now->getName() == "Role 3")
+			{
+				SetColor(10);
+				printFileAtPosition("BD1.txt", 81, 28);
+				SetColor(7);
+				roles[2]->printInfo(82, 29);
+			}
+
+			printFileAtPosition("mainInfo.txt", 77, 2);
+
+			gotoxy(78, 3);
+			std::cout << "Current Player: " << now->getName();
+			gotoxy(78, 26);
+			std::cout << "Open Bag(i)";
+			gotoxy(78, 27);
+			std::cout << "W,A,S,D to Move";
+			gotoxy(78, 4);
+			cout << "move step: " << maxMove;
 
 			return true;
 		}
@@ -1228,7 +1283,7 @@ bool Game::useItem()
 					gotoxy(82, 4 + i);
 					if (index / 10 * 10 + i < temp.size())
 					{
-						std::cout << left << setw(15) << getItemName(temp[i + index / 10 * 10].second);
+						std::cout << left << setw(23) << getItemName(temp[i + index / 10 * 10].second);
 					}
 					else
 					{
@@ -1255,7 +1310,7 @@ bool Game::useItem()
 					gotoxy(82, 4 + i);
 					if (index + i < temp.size())
 					{
-						std::cout << left << setw(15) << getItemName(temp[i + index].second);
+						std::cout << left << setw(23) << getItemName(temp[i + index].second);
 					}
 					else
 					{
