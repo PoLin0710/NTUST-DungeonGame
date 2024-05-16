@@ -91,5 +91,10 @@ void Shop::showShopInfo(int idx, int& money)
 	}
 
 	cout << "\n\n";
-	cout << items[idx].introduction;
+	cout << items[idx].introduction << std::endl << std::endl;
+	std::cout << "Back(Esc)\n";
+	std::cout << "Choose UP (W), DOWN(D)\n";
+	std::cout << "Enter to check!\n";
+
+
 }

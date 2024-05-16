@@ -26,6 +26,7 @@
     <ClCompile Include="..\..\src\IO.cpp" />
     <ClCompile Include="..\..\src\List.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\RandomEvent.cpp" />
     <ClCompile Include="..\..\src\Role.cpp" />
     <ClCompile Include="..\..\src\Shop.cpp" />
   </ItemGroup>
@@ -38,14 +39,17 @@
     <ClInclude Include="..\..\src\IO.h" />
     <ClInclude Include="..\..\src\List.h" />
     <ClInclude Include="..\..\src\Position.h" />
+    <ClInclude Include="..\..\src\RandomEvent.h" />
     <ClInclude Include="..\..\src\Role.h" />
     <ClInclude Include="..\..\src\Shop.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="BD1.txt" />
+    <Text Include="BD2.txt" />
     <Text Include="combatBoard.txt" />
     <Text Include="endCombat.txt" />
     <Text Include="interfemce.txt" />
+    <Text Include="mainInfo.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

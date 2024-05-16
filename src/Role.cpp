@@ -25,6 +25,8 @@ Role::Role(string name, char icon) :Entity(name, ENTITY_TYPE::ROLE, icon)
 	this->setWeapon(rand() % WEAPON_IDX::ELUCIDATOR_DARK_REPULSER + 1);
 	this->setArmor(rand() % ARMOR_IDX::LAUREL_WREATH + 1);
 	this->setAccessory(rand() % ACCESSORY_IDX::BRACELET + 1);
+
+	update();
 }
 
 Role::~Role()

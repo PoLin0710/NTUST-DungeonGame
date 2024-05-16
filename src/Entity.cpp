@@ -127,7 +127,7 @@ int Entity::getSpeed() {
 }
 
 int Entity::getHitRate() const {
-	return curHitRate;
+	return maxHitRate;
 }
 
 int Entity::getPAttack() const {
@@ -189,10 +189,10 @@ char Entity::getIcon() const
 	return eicon;
 }
 
-double Entity::RolltheDice(int diceNum, int successNum)
+double Entity::RolltheDice(int diceNum, int successNum, int  x, int y)
 {
 	double successRate = 0;
-	gotoxy(3, 22);
+	gotoxy(x, y);
 
 	for (int i = 0; i < diceNum; i++)
 	{
@@ -350,14 +350,14 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 		if (getWeapon() == WEAPON_IDX::MAGIC_WAND || getWeapon() == WEAPON_IDX::RITUAL_SWORD)
 		{
 			this->curHitRate = this->maxHitRate - 5;
-			this->curMAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum)); //之後更改
+			this->curMAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum), 3, 22); //之後更改
 			attack(curSkill.skillIdx, 0, this->curMAttack, target);
 
 			this->curHitRate = this->maxHitRate;
 		}
 		else if (getWeapon() == WEAPON_IDX::HAMMER || getWeapon() == WEAPON_IDX::GIANT_HAMMER)
 		{
-			float rate = RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum));
+			float rate = RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum), 3, 22);
 
 			std::vector<Entity*> Aoe;
 
@@ -385,7 +385,7 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 		}
 		else
 		{
-			this->curPAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum)); //之後更改
+			this->curPAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum), 3, 22); //之後更改
 			attack(curSkill.skillIdx, this->curPAttack, 0, target);
 		}
 	}
@@ -397,7 +397,7 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 			rate = min(rate, 98);
 
 			this->curHitRate = rate;
-			double state = RolltheDice(1, useFocus(curSkill.diceNum));
+			double state = RolltheDice(1, useFocus(curSkill.diceNum), 3, 22);
 			this->curHitRate = this->maxHitRate;
 
 			if (state >= 1)
@@ -412,7 +412,7 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 
 			std::vector<Entity*> target = chooseEntitys(curSkill.skillIdx, enemys);
 			this->curHitRate = rate;
-			double state = RolltheDice(1, useFocus(curSkill.diceNum));
+			double state = RolltheDice(1, useFocus(curSkill.diceNum), 3, 22);
 			this->curHitRate = this->maxHitRate;
 
 			if (state >= 1)
@@ -424,14 +424,14 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 		else if (curSkill.skillIdx == SKILL_IDX::HEAL)
 		{
 			std::vector<Entity*> target = chooseEntitys(curSkill.skillIdx, roles);
-			this->curMAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum));
+			this->curMAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum), 3, 22);
 			heal(this->curMAttack, target);
 
 		}
 		else if (curSkill.skillIdx == SKILL_IDX::SPEEDUP)
 		{
 			std::vector<Entity*> target = chooseEntitys(curSkill.skillIdx, roles);
-			double state = RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum));
+			double state = RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum), 3, 22);
 
 			if (state >= 1)
 			{

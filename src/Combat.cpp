@@ -393,6 +393,7 @@ void Combat::start()
 	// 重複檢查螢幕大小
 	while (true) {
 		if (checkConsoleSize(requiredRows, requiredCols)) {
+			system("cls");
 			printFileAtPosition("combatBoard.txt", 0, 0);
 			break;
 		}
@@ -438,6 +439,8 @@ void Combat::start()
 			}
 
 			gotoxy(0, 48);
+
+			Sleep(1000);
 			break;
 		}
 	}

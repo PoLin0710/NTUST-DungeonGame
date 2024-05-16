@@ -42,6 +42,9 @@
     <ClCompile Include="..\..\src\Game.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\RandomEvent.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Entity.h">
@@ -74,6 +77,9 @@
     <ClInclude Include="..\..\src\Game.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\RandomEvent.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="BD1.txt">
@@ -86,6 +92,12 @@
       <Filter>資源檔</Filter>
     </Text>
     <Text Include="endCombat.txt">
+      <Filter>資源檔</Filter>
+    </Text>
+    <Text Include="BD2.txt">
+      <Filter>資源檔</Filter>
+    </Text>
+    <Text Include="mainInfo.txt">
       <Filter>資源檔</Filter>
     </Text>
   </ItemGroup>

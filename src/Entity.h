@@ -99,7 +99,7 @@ public:
 	bool isDizziness();
 	char getIcon()const;
 
-	double RolltheDice(int, int);
+	double RolltheDice(int, int, int, int);
 	void update();
 	void combatUpdate();
 	bool useSkill(int, std::vector<Entity*>, std::vector<Entity*>);
