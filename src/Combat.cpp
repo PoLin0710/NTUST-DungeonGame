@@ -336,7 +336,7 @@ bool Combat::useItem(Entity* role)
 	gotoxy(2, 26);
 	std::cout << "Back(BackSpace)";
 	gotoxy(2, 27);
-	std::cout << "Choose UP (W), DOWN(D)";
+	std::cout << "Choose UP (W), DOWN(S)";
 	gotoxy(2, 28);
 	std::cout << "Enter to check!";
 

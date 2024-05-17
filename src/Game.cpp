@@ -299,7 +299,7 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 			gotoxy(78, 25);
 			std::cout << "End(Enter)";
 			gotoxy(78, 26);
-			std::cout << "Choose UP (W), DOWN(D)";
+			std::cout << "Choose UP (W), DOWN(S)";
 			gotoxy(78, 27);
 			std::cout << "Enter to check!";
 
@@ -395,7 +395,7 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 		while (true)
 		{
 			gotoxy(78, 26);
-			std::cout << "Choose UP (W), DOWN(D)";
+			std::cout << "Choose UP (W), DOWN(S)";
 			gotoxy(78, 27);
 			std::cout << "Enter to check!";
 			char command = _getch();
