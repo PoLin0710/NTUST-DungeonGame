@@ -51,6 +51,10 @@ Combat::Combat(vector<Role*> roles, vector<Entity*>enemys)
 
 Combat::~Combat()
 {
+	for (auto i : roles)
+	{
+		i->update();
+	}
 }
 
 bool Combat::update()
@@ -154,7 +158,7 @@ bool Combat::update()
 					gotoxy(2, 26);
 					std::cout << "Open Bag (I)";
 					gotoxy(2, 27);
-					std::cout << "Choose UP (W), DOWN(D)";
+					std::cout << "Choose UP (W), DOWN(S)";
 					gotoxy(2, 28);
 					std::cout << "Enter to check!";
 				}

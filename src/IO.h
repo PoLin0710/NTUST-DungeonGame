@@ -3,6 +3,10 @@
 #include <fstream>
 #include <windows.h>
 
+void hideCursor();
+
+void showCursor();
+
 bool checkConsoleSize(int requiredRows, int requiredCols);
 // ©w¸q gotoxy ¨ç¦¡
 void gotoxy(int x, int y);

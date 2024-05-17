@@ -266,6 +266,8 @@ void Entity::update()
 
 	isFlee = false;
 	this->turn = 0;
+	buffs.clear();
+
 	activeSkills = equipment.getSkills();
 	passiveSkills = equipment.getPassiveSkills();
 	activeSkillsCD.clear();
@@ -467,7 +469,7 @@ int Entity::useFocus(int diceNum)
 
 
 	gotoxy(3, 21);
-	std::cout << "Focus";
+	std::cout << "Focus (A :Reduce Focus D :ADD Focus)";
 
 	gotoxy(3, 22);
 	for (int i = 0; i < diceNum; i++)

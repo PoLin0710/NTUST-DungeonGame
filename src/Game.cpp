@@ -769,19 +769,25 @@ void Game::gameStart(Role* target)
 		}
 	}
 
-	if (board[now->ePos.y][now->ePos.x] == 'T')
+	if (now->getVitality() != 0)
 	{
-		now->setVitality(now->getVitality() + 50);
-		now->setFocus(now->getFocus() + 5);
+		if (board[now->ePos.y][now->ePos.x] == 'T')
+		{
+			now->setVitality(now->getVitality() + 50);
+			now->setFocus(now->getFocus() + 5);
+		}
+
+		now->setVitality(now->getVitality() + maxMove);
 	}
 
-	now->setVitality(now->getVitality() + maxMove);
 }
 
 void Game::start()
 {
 	const int requiredRows = 70;
 	const int requiredCols = 120;
+
+	hideCursor();
 	// 重複檢查螢幕大小
 	while (true) {
 		if (checkConsoleSize(requiredRows, requiredCols)) {
@@ -802,6 +808,7 @@ void Game::start()
 			break;
 		}
 		else {
+			system("cls");
 			std::cerr << "請調整螢幕大小至至少 " << requiredRows << " 行 " << requiredCols << " 列" << std::endl;
 			Sleep(1000); // 等待 3 秒鐘
 		}
@@ -955,14 +962,13 @@ bool Game::useItem()
 
 		pr++;
 	}
-	gotoxy(78, 24);
-	std::cout << "End(Enter)";
+
 	gotoxy(78, 25);
 	std::cout << "Back(BackSpace)";
 	gotoxy(78, 26);
-	std::cout << "Choose UP (W), DOWN(D)";
+	std::cout << "Choose UP (W), DOWN(D)  ";
 	gotoxy(78, 27);
-	std::cout << "Enter to check!";
+	std::cout << "Enter to check!         ";
 
 
 	index = 0;
@@ -999,6 +1005,13 @@ bool Game::useItem()
 			if (temp[index].second == ITEM_IDX::ITELEPORT_SCROLL)
 			{
 				Position temp = now->ePos;
+				gotoxy(78, 25);
+
+				std::cout << "                            ";
+				gotoxy(78, 26);
+				std::cout << "Use W,A,S,D to choose target!";
+				gotoxy(78, 27);
+				std::cout << "Enter to check!             ";
 
 				while (true)
 				{
