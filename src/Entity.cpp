@@ -358,6 +358,7 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 		else if (getWeapon() == WEAPON_IDX::HAMMER || getWeapon() == WEAPON_IDX::GIANT_HAMMER)
 		{
 			float rate = RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum), 3, 22);
+			this->curMAttack = this->maxMAttack * rate;
 
 			std::vector<Entity*> Aoe;
 
@@ -385,9 +386,13 @@ bool Entity::useSkill(int skill_IDX, std::vector<Entity*> roles, std::vector<Ent
 		}
 		else if (getWeapon() == WEAPON_IDX::ELUCIDATOR_DARK_REPULSER)
 		{
-			this->curPAttack = this->maxMAttack * RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum), 3, 22);
+			float rate = RolltheDice(curSkill.diceNum, useFocus(curSkill.diceNum), 3, 22);
+			this->curPAttack = this->maxMAttack * rate;
 
-			target[0]->insertBuff(Buff::BUFF_IDX::BPOISONED);
+			if (rate == 1)
+			{
+				target[0]->insertBuff(Buff::BUFF_IDX::BPOISONED);
+			}
 
 			attack(curSkill.skillIdx, 0, this->curMAttack, target);
 		}

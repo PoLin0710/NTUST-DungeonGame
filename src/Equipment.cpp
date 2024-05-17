@@ -134,7 +134,7 @@ int Equipment::getVitality(int vitality) const
 
 int Equipment::getFocus(int focus) const
 {
-	return min(int((focus + eFocus) * mulFocus), maxFocus);
+	return maxFocus;
 }
 
 int Equipment::getMaxFocus(int focus) const

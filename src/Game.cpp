@@ -262,6 +262,8 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 					gotoxy(78, 4);
 					cout << "move step: " << maxMove;
 
+					gotoxy(78, 25);
+					std::cout << "End(Enter)";
 					gotoxy(78, 26);
 					std::cout << "Open Bag(i)";
 					gotoxy(78, 27);
@@ -294,6 +296,8 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 
 		while (true)
 		{
+			gotoxy(78, 25);
+			std::cout << "End(Enter)";
 			gotoxy(78, 26);
 			std::cout << "Choose UP (W), DOWN(D)";
 			gotoxy(78, 27);
@@ -458,10 +462,15 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 				{
 					printFileAtPosition("mainInfo.txt", 77, 2);
 					gotoxy(78, 3);
+					std::cout << "Random Event!!";
+
+					gotoxy(78, 3);
 					std::cout << "Current Player: " << now->getName();
 					gotoxy(78, 4);
 					cout << "move step: " << maxMove;
 
+					gotoxy(78, 25);
+					std::cout << "End(Enter)";
 					gotoxy(78, 26);
 					std::cout << "Open Bag(i)";
 					gotoxy(78, 27);
@@ -471,6 +480,24 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 			}
 		}
 	}
+	else if (board[y][x] == 'T')
+	{
+		printFileAtPosition("mainInfo.txt", 77, 2);
+		gotoxy(78, 3);
+		std::cout << "Current Player: " << now->getName();
+		gotoxy(78, 4);
+		cout << "move step: " << maxMove;
+
+		gotoxy(78, 6);
+		cout << "In Tent";
+
+		gotoxy(78, 25);
+		std::cout << "End(Enter)";
+		gotoxy(78, 26);
+		std::cout << "Open Bag(i)";
+		gotoxy(78, 27);
+		std::cout << "W,A,S,D to Move";
+	}
 	else
 	{
 		printFileAtPosition("mainInfo.txt", 77, 2);
@@ -479,6 +506,8 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 		gotoxy(78, 4);
 		cout << "move step: " << maxMove;
 
+		gotoxy(78, 25);
+		std::cout << "End(Enter)";
 		gotoxy(78, 26);
 		std::cout << "Open Bag(i)";
 		gotoxy(78, 27);
@@ -494,6 +523,8 @@ void Game::showAllMap(int viewLeftUpX, int viewLeftUpY, int x, int y)
 	int gotoX = 18;
 	int gotoY = 5;
 
+	gotoxy(78, 25);
+	std::cout << "End(Enter)";
 	gotoxy(78, 26);
 	std::cout << "Open Bag(i)";
 	gotoxy(78, 27);
@@ -586,10 +617,12 @@ void Game::gameStart(Role* target)
 	int viewLeftUpX = min(max(target->ePos.x - 15, 0), 10);
 	int viewLeftUpY = min(max(target->ePos.y - 10, 0), 100);
 	showBoard(viewLeftUpX, viewLeftUpY, target->ePos.x, target->ePos.y, true, { 0,0 }, true);
-	printFileAtPosition("mainInfo.txt", 77, 2);
+	//printFileAtPosition("mainInfo.txt", 77, 2);
 
 	gotoxy(78, 3);
 	std::cout << "Current Player: " << now->getName();
+	gotoxy(78, 25);
+	std::cout << "End(Enter)";
 	gotoxy(78, 26);
 	std::cout << "Open Bag(i)";
 	gotoxy(78, 27);
@@ -711,6 +744,12 @@ void Game::gameStart(Role* target)
 		{
 			isMove = false;
 			useItem();
+
+			viewLeftUpX = min(max(target->ePos.x - 15, 0), 10);
+			viewLeftUpY = min(max(target->ePos.y - 10, 0), 100);
+
+			moveVideo = true;
+
 		}
 		else
 		{
@@ -721,7 +760,10 @@ void Game::gameStart(Role* target)
 
 		if (isMove || moveVideo)
 		{
-			maxMove -= isMove;
+			if (isMove)
+			{
+				maxMove -= isMove;
+			}
 
 			showBoard(viewLeftUpX, viewLeftUpY, target->ePos.x, target->ePos.y, moveVideo, delta, true);
 		}
@@ -730,6 +772,7 @@ void Game::gameStart(Role* target)
 	if (board[now->ePos.y][now->ePos.x] == 'T')
 	{
 		now->setVitality(now->getVitality() + 50);
+		now->setFocus(now->getFocus() + 5);
 	}
 
 	now->setVitality(now->getVitality() + maxMove);
@@ -737,11 +780,16 @@ void Game::gameStart(Role* target)
 
 void Game::start()
 {
-	const int requiredRows = 50;
+	const int requiredRows = 70;
 	const int requiredCols = 120;
 	// 重複檢查螢幕大小
 	while (true) {
 		if (checkConsoleSize(requiredRows, requiredCols)) {
+			system("cls");
+			printFileAtPosition("start.txt", 0, 0);
+			Sleep(2500);
+
+
 			system("cls");
 			printFileAtPosition("BD2.txt", 0, 0);
 
@@ -859,8 +907,10 @@ void Game::start()
 		{
 			break;
 		}
-
 	}
+
+	system("cls");
+	printFileAtPosition("gameover.txt", 0, 0);
 
 }
 
@@ -905,6 +955,8 @@ bool Game::useItem()
 
 		pr++;
 	}
+	gotoxy(78, 24);
+	std::cout << "End(Enter)";
 	gotoxy(78, 25);
 	std::cout << "Back(BackSpace)";
 	gotoxy(78, 26);
@@ -933,6 +985,8 @@ bool Game::useItem()
 			gotoxy(78, 4);
 			cout << "move step: " << maxMove;
 
+			gotoxy(78, 25);
+			std::cout << "End(Enter)";
 			gotoxy(78, 26);
 			std::cout << "Open Bag(i)";
 			gotoxy(78, 27);
@@ -1054,12 +1108,16 @@ bool Game::useItem()
 					{
 						now->ePos.x = temp.x;
 						now->ePos.y = temp.y;
+
 						showBoard(viewLeftUpX, viewLeftUpY, temp.x, temp.y, true, delta, true);
 
 						printFileAtPosition("mainInfo.txt", 77, 2);
 
 						gotoxy(78, 3);
 						std::cout << "Current Player: " << now->getName();
+
+						gotoxy(78, 25);
+						std::cout << "End(Enter)";
 						gotoxy(78, 26);
 						std::cout << "Open Bag(i)";
 						gotoxy(78, 27);
@@ -1085,145 +1143,10 @@ bool Game::useItem()
 			}
 			else if (temp[index].second == ITEM_IDX::ITENT)
 			{
-				Position temp = now->ePos;
-
-				while (true)
-				{
-					bool isMove = true;
-					bool moveVideo = false;
-					Position delta;
-
-					char input = _getch();
-
-					if (input == 'W' || input == 'w')
-					{
-
-
-						if (vaildMove({ temp.x, temp.y - 1 }, true)) {
-							temp.y--;
-						}
-						else
-						{
-							isMove = false;
-
-							if (temp.y == 1)
-							{
-								viewLeftUpY = 0;
-								moveVideo = true;
-							}
-
-						}
-
-						if (temp.y - 1 < viewLeftUpY) {
-							viewLeftUpY--;
-							moveVideo = true;
-						}
-
-						delta = { 0,-1 };
-					}
-					else if (input == 'S' || input == 's')
-					{
-						if (vaildMove({ temp.x, temp.y + 1 }, true)) {
-							temp.y++;
-						}
-						else
-						{
-							isMove = false;
-
-							if (temp.y + 1 == 140)
-							{
-								viewLeftUpY = 122;
-								moveVideo = true;
-							}
-						}
-
-						if (temp.y + 1 >= viewLeftUpY + 20) {
-							viewLeftUpY++;
-							moveVideo = true;
-						}
-
-						delta = { 0, 1 };
-					}
-					else if (input == 'A' || input == 'a')
-					{
-
-						if (vaildMove({ temp.x - 1, temp.y }, true)) {
-							temp.x--;
-						}
-						else
-						{
-							isMove = false;
-
-							if (temp.x == 1)
-							{
-								viewLeftUpX = 0;
-								moveVideo = true;
-							}
-						}
-
-						if (temp.x - 1 < viewLeftUpX) {
-							viewLeftUpX--;
-							moveVideo = true;
-						}
-
-						delta = { -1, 0 };
-					}
-					else if (input == 'D' || input == 'd')
-					{
-						if (vaildMove({ temp.x + 1, temp.y }, true)) {
-							temp.x++;
-						}
-						else
-						{
-							isMove = false;
-
-							if (temp.x == 50)
-							{
-								viewLeftUpX = 12;
-								moveVideo = true;
-							}
-						}
-
-						if (temp.x + 1 >= viewLeftUpX + 40) {
-							viewLeftUpX++;
-							moveVideo = true;
-						}
-
-						delta = { 1, 0 };
-					}
-					else if (input == 13)
-					{
-						board[temp.y][temp.x] = 'T';
-						showBoard(viewLeftUpX, viewLeftUpY, temp.x, temp.y, true, delta, true);
-
-						printFileAtPosition("mainInfo.txt", 77, 2);
-
-						gotoxy(78, 3);
-						std::cout << "Current Player: " << now->getName();
-						gotoxy(78, 26);
-						std::cout << "Open Bag(i)";
-						gotoxy(78, 27);
-						std::cout << "W,A,S,D to Move";
-						gotoxy(78, 4);
-						cout << "move step: " << maxMove;
-						break;
-					}
-					else
-					{
-						isMove = false;
-
-						delta = { 0,0 };
-					}
-
-					if (isMove || moveVideo)
-					{
-						showBoard(viewLeftUpX, viewLeftUpY, temp.x, temp.y, moveVideo, delta, false);
-					}
-
-
-				}
+				board[now->ePos.y][now->ePos.x] = 'T';
 			}
-			else if (tempBag[index].type == BAG_TYPE::ITEM)
+
+			if (tempBag[index].type == BAG_TYPE::ITEM)
 			{
 				now->useItem(temp[index].second, temp[index].first);
 			}
@@ -1259,6 +1182,9 @@ bool Game::useItem()
 
 			gotoxy(78, 3);
 			std::cout << "Current Player: " << now->getName();
+
+			gotoxy(78, 25);
+			std::cout << "End(Enter)";
 			gotoxy(78, 26);
 			std::cout << "Open Bag(i)";
 			gotoxy(78, 27);

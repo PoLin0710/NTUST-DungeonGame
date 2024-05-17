@@ -84,15 +84,23 @@ void Role::wearEquipment(int equipmentIdx, int bagIdx)
 		if (weapon != WEAPON_IDX::WEAPON_NONE)
 		{
 			bag.erase(bag.begin() + bagIdx);
-			if (equipmentIdx != ITEM_IDX::IElucidator_Dark_Repulser)
+
+			if (weapon != WEAPON_IDX::ELUCIDATOR_DARK_REPULSER)
 			{
 				bag.push_back({ BAG_TYPE::EQUIPMENT ,weapon - 1 });
+			}
+			else
+			{
+				bag.push_back({ BAG_TYPE::EQUIPMENT ,ITEM_IDX::IElucidator_Dark_Repulser });
+			}
+
+			if (equipmentIdx != ITEM_IDX::IElucidator_Dark_Repulser)
+			{
 				this->setWeapon(equipmentIdx + 1);
 			}
 			else
 			{
-				bag.push_back({ BAG_TYPE::EQUIPMENT ,6 });
-				this->setWeapon(6);
+				this->setWeapon(WEAPON_IDX::ELUCIDATOR_DARK_REPULSER);
 			}
 		}
 
