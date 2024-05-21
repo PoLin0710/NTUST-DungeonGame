@@ -1,3 +1,19 @@
+/***********************************************************************
+ * File: Entity.h
+ * Author:
+ *        B11215040 HUANG,PO-LIN (oliver590617@gmail.com)
+ *        B11215030 SONG,BING-YU (yehyi817@gmail.com)
+ *        B11215014 ¤ýà±´¸ (sunnyching901105@gmail.com)
+ *        B11215008 ¬x§B¿o (n590762743@gmail.com)
+ * Create Date: 2024-05-21
+ * Editor:
+ *        B11215040 HUANG,PO-LIN (oliver590617@gmail.com)
+ *        B11215030 SONG,BING-YU (yehyi817@gmail.com)
+ *        B11215014 ¤ýà±´¸ (sunnyching901105@gmail.com)
+ *        B11215008 ¬x§B¿o (n590762743@gmail.com)
+ * Update Date: 2024-05-21
+ * Description: Definition of the Entity class, representing characters and enemies in the game.
+***********************************************************************/
 #ifndef _ENTITY_H_
 #define _ENTITY_H_
 
@@ -14,17 +30,21 @@
 #include <ctime>
 #include <map>
 
+//Declare Entity type
 enum ENTITY_TYPE {
 	ROLE = 0,
 	ENEMY = 1
 };
 
+//Declare Entity class
 class Entity {
 private:
+	//Declare info
 	int type;
 	std::string name;
 	char eicon;
 
+	//Declare initValue
 	int initVitality;
 	int initFocus;
 	int initSpeed;
@@ -34,6 +54,7 @@ private:
 	int initPDefense;
 	int initMDefense;
 
+	//Declare maxValue
 	int maxVitality;
 	int maxFocus;
 	int maxSpeed;
@@ -43,6 +64,7 @@ private:
 	int maxPDefense;
 	int maxMDefense;
 
+	//Declare currentValue
 	int curVitality;
 	int curFocus;
 	int curSpeed;
@@ -52,21 +74,30 @@ private:
 	int curPDefense;
 	int curMDefense;
 
+	//Flee state
 	bool isFlee;
 
+	//Equipment attribute
 	Equipment equipment;
 
+	//active skills attribute
 	std::vector<skill> activeSkills;
 	std::vector<int> activeSkillsCD;
 
+	//passive skills attribute
 	std::vector<skill> passiveSkills;
 	std::vector<int> passiveSkillsCD;
 
+	//bbuff attribute
 	std::vector<Buff::Buff> buffs;
 public:
+	//Constructor
 	Entity(std::string, int, char);
+
+	//Destructor
 	virtual~Entity();
 
+	//Set function
 	void setVitality(int);
 	void setFocus(int);
 	void setSpeed(int);
@@ -80,6 +111,7 @@ public:
 	void setAccessory(int);
 	void setIcon(char);
 
+	//Get  function
 	string getName() const;
 	int getVitality() const;
 	int getFocus() const;
@@ -99,6 +131,7 @@ public:
 	bool isDizziness();
 	char getIcon()const;
 
+	//Use function
 	double RolltheDice(int, int, int, int);
 	void update();
 	void combatUpdate();
@@ -113,10 +146,11 @@ public:
 	bool findSkills(SKILL_IDX);
 	bool findBuffs(Buff::BUFF_IDX);
 
-
+	//Output function
 	void printInfo(int, int);
 	void printSkills(int, int);
 
+	//info attribute
 	int turn;
 	Position ePos;
 };
