@@ -103,6 +103,11 @@ void Equipment::updateEquipment()
 		skills[SKILL_IDX::ATTACK].diceNum = 1;
 		eMAttack += 15;
 	}
+	else if (weapon == WEAPON_IDX::ELUCIDATOR_DARK_REPULSER)
+	{
+		skills[SKILL_IDX::ATTACK].diceNum = 6;
+		ePAttack += 30;
+	}
 
 	// Update attributes based on the armor
 	if (armor == ARMOR_IDX::WOODEN_SHIELD)

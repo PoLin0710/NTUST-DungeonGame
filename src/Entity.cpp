@@ -924,7 +924,7 @@ std::vector<Entity*> Entity::chooseEntitys(int skill_IDX, std::vector<Entity*> c
 				);
 
 	// Choose attack is to one or all
-	int oneSelf[] = { SKILL_IDX::ATTACK ,SKILL_IDX::FLEE,SKILL_IDX::PROVOKE,SKILL_IDX::HEAL,SKILL_IDX::SPEEDUP, };
+	int oneSelf[] = { SKILL_IDX::ATTACK ,SKILL_IDX::FLEE,SKILL_IDX::PROVOKE,SKILL_IDX::HEAL,SKILL_IDX::SPEEDUP,SKILL_IDX::STARBURST_STREAM };
 	int allSelf[] = { SKILL_IDX::SHOCK_BLAST };
 
 	//Declare target
