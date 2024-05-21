@@ -1,15 +1,37 @@
+/***********************************************************************
+ * File: Game.cpp
+ * Author:
+ *        B11215040 HUANG,PO-LIN (oliver590617@gmail.com)
+ *        B11215030 SONG,BING-YU (yehyi817@gmail.com)
+ *        B11215014 ¤ýà±´¸ (sunnyching901105@gmail.com)
+ *        B11215008 ¬x§B¿o (n590762743@gmail.com)
+ * Create Date: 2024-05-21
+ * Editor:
+ *        B11215040 HUANG,PO-LIN (oliver590617@gmail.com)
+ *        B11215030 SONG,BING-YU (yehyi817@gmail.com)
+ *        B11215014 ¤ýà±´¸ (sunnyching901105@gmail.com)
+ *        B11215008 ¬x§B¿o (n590762743@gmail.com)
+ * Update Date: 2024-05-21
+ * Description: Implementation of the Game class, managing the overall game state and flow.
+***********************************************************************/
 #include "Game.h"
 
+// Intent: To initialize a Game object with default roles, enemies, and events
+// Pre: None
+// Post: Constructs a Game object and initializes roles, enemies, and events
 Game::Game()
 {
 	srand(time(NULL));
 
+	//init role
 	roles.push_back(new Role("Role 1", '1'));
 	roles.push_back(new Role("Role 2", '2'));
 	roles.push_back(new Role("Role 3", '3'));
 
+	//init map
 	board.resize(142, vector<char>(52));
 
+	//init enemys
 	for (int i = 0; i < 100; i++)
 	{
 		std::string name = "Enemy" + to_string(i);
@@ -17,16 +39,22 @@ Game::Game()
 		enemys.push_back(new Entity(name, ENTITY_TYPE::ENEMY, 'E'));
 	}
 
+	//init random events
 	for (int i = 0; i < 100; i++)
 	{
 		events.push_back(new RandomEvent);
 	}
 
+	//Set
 	setBoard();
 }
 
+// Intent: To set up the game board with initial values for walls, roads, shops, enemies, and events
+// Pre: None
+// Post: Initializes the game board with walls, roads, shops, enemies, and events
 void Game::setBoard()
 {
+	//Set Map Wall and Road
 	for (int i = 0; i <= 141; i++)
 	{
 		for (int j = 0; j <= 51; j++)
@@ -40,7 +68,7 @@ void Game::setBoard()
 		}
 	}
 
-
+	//Set obstacle
 	for (int i = 0; i < 50; i++)
 	{
 		int x, y;
@@ -49,6 +77,7 @@ void Game::setBoard()
 		board[y][x] = ICON_IDX::WALL;
 	}
 
+	//Set Shop
 	for (int i = 0; i < 15; i++)
 	{
 		int x, y;
@@ -67,6 +96,7 @@ void Game::setBoard()
 
 	}
 
+	//Set Enemys
 	for (auto i : enemys)
 	{
 		while (true)
@@ -83,6 +113,7 @@ void Game::setBoard()
 		}
 	}
 
+	//Set randomEvents
 	for (auto i : events)
 	{
 		while (true)
@@ -99,8 +130,10 @@ void Game::setBoard()
 		}
 	}
 
+	//Declare temp board
 	vector<vector<char>> tempBoard = board;
 
+	//Set roles position
 	for (auto i : roles)
 	{
 		while (true)
@@ -116,27 +149,34 @@ void Game::setBoard()
 			}
 		}
 	}
-
 }
 
+// Intent: Display a portion of the game board based on the view parameters
+// Pre: viewLeftUpX, viewLeftUpY, x, y must be valid board coordinates, clear and detect are boolean flags, delta must be a valid Position object
+// Post: Displays the specified portion of the game board
 void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear, Position delta, bool detect)
 {
+	//Output pos
 	int gotoX = 18;
 	int gotoY = 5;
 
+	//Declare temp Board
 	vector<vector<char>> tempBoard = board;
 
+	//Set
 	for (auto i : roles)
 	{
 		tempBoard[i->ePos.y][i->ePos.x] = i->getIcon();
 	}
 
+	//Optimize output
 	if (clear)
 	{
 		showAllMap(viewLeftUpX, viewLeftUpY, x, y);
 	}
 	else
 	{
+		//Output pos
 		int lastX = x - delta.x - viewLeftUpX + gotoX;
 		int lastY = y - delta.y - viewLeftUpY + gotoY;
 
@@ -146,15 +186,17 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 		SetColor(176);
 		gotoxy(x - viewLeftUpX + gotoX, y - viewLeftUpY + gotoY);
 
+		//Detect type
 		if (detect)
 		{
-			cout << now->getIcon();//§ïorder
+			cout << now->getIcon();
 		}
 		else
 		{
 			cout << " ";
 		}
 
+		//==Output==
 		gotoxy(lastX, lastY);
 
 		if (tempBoard[indexY][indexX] == (new Shop)->getIcon())
@@ -184,12 +226,15 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 	}
 
 	SetColor(7);
+	//================
 
+	//Detect object 
 	if (!detect)
 	{
 		return;
 	}
 
+	//Output Shop info
 	if (board[y][x] == (new Shop)->getIcon())
 	{
 		printFileAtPosition("mainInfo.txt", 77, 2);
@@ -206,6 +251,7 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 		gotoxy(82, 7);
 		std::cout << " Exit";
 
+		//Select mode
 		while (true)
 		{
 			char command = _getch();
@@ -232,7 +278,7 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 			}
 			else if (command == 13)
 			{
-				if (index == 0)
+				if (index == 0) // To shop
 				{
 					now->insertBag((new Shop)->intoShop(now->getMoney()));
 
@@ -272,18 +318,20 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 				}
 			}
 		}
+		//==============
 	}
-	else if (board[y][x] == 'E')
+	else if (board[y][x] == 'E') //combat
 	{
-		int random = rand() % 3 + 1;
+		int random = rand() % 3 + 1; //Set enemys
 
+		//Output
 		printFileAtPosition("mainInfo.txt", 77, 2);
 		gotoxy(78, 3);
 		std::cout << "Dangerous!!";
 		gotoxy(78, 4);
 		std::cout << "Enemy Have :" << random;
 
-
+		//Output
 		int index = 0;
 		gotoxy(80, 6);
 		std::cout << "->";
@@ -294,6 +342,7 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 		gotoxy(82, 7);
 		std::cout << " Exit";
 
+		//Select mode
 		while (true)
 		{
 			gotoxy(78, 25);
@@ -327,7 +376,7 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 			}
 			else if (command == 13)
 			{
-				if (index == 0)
+				if (index == 0) //to combat
 				{
 					vector<Entity*> curEnemys;
 
@@ -372,16 +421,20 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 				}
 			}
 		}
+		//============================
 	}
-	else if (board[y][x] == '?')
+	else if (board[y][x] == '?') //random events
 	{
+		//Output
 		printFileAtPosition("mainInfo.txt", 77, 2);
 		gotoxy(78, 3);
 		std::cout << "Random Event!!";
 
+		//create new Event
 		RandomEvent newEvent;
 		newEvent.update();
 
+		//Output
 		int index = 0;
 		gotoxy(80, 6);
 		std::cout << "->";
@@ -392,6 +445,7 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 		gotoxy(82, 7);
 		std::cout << " Flee";
 
+		//Select mode
 		while (true)
 		{
 			gotoxy(78, 26);
@@ -422,7 +476,7 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 			}
 			else if (command == 13)
 			{
-				if (index == 0)
+				if (index == 0) //Try event
 				{
 					now->setHitRate(newEvent.hitRate);
 					double rate = now->RolltheDice(newEvent.diceNum, 0, 80, 13);
@@ -479,9 +533,11 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 				}
 			}
 		}
+		//=====================================
 	}
-	else if (board[y][x] == 'T')
+	else if (board[y][x] == 'T') // Tent
 	{
+		//Output
 		printFileAtPosition("mainInfo.txt", 77, 2);
 		gotoxy(78, 3);
 		std::cout << "Current Player: " << now->getName();
@@ -518,11 +574,16 @@ void Game::showBoard(int viewLeftUpX, int viewLeftUpY, int x, int y, bool clear,
 
 }
 
+// Intent: Display the entire game map within the specified view parameters
+// Pre: viewLeftUpX, viewLeftUpY, x, y must be valid board coordinates
+// Post: Displays the entire game map in the console
 void Game::showAllMap(int viewLeftUpX, int viewLeftUpY, int x, int y)
 {
+	//Output pos
 	int gotoX = 18;
 	int gotoY = 5;
 
+	//Output
 	gotoxy(78, 25);
 	std::cout << "End(Enter)";
 	gotoxy(78, 26);
@@ -532,6 +593,7 @@ void Game::showAllMap(int viewLeftUpX, int viewLeftUpY, int x, int y)
 
 	gotoxy(8, 1);
 
+	//Output turns
 	for (auto it = order.begin(); it != order.end(); ++it) {
 		if ((*it)->getVitality() == 0)
 		{
@@ -545,13 +607,16 @@ void Game::showAllMap(int viewLeftUpX, int viewLeftUpY, int x, int y)
 		}
 	}
 
+	//Declare tempBoard
 	vector<vector<char>> tempBoard = board;
 
+	//Set Role icon
 	for (auto i : roles)
 	{
 		tempBoard[i->ePos.y][i->ePos.x] = i->getIcon();
 	}
 
+	//Output viewMap
 	for (int i = min(viewLeftUpY, 122); i < viewLeftUpY + 20; i++)
 	{
 		gotoxy(gotoX, gotoY++);
@@ -587,6 +652,7 @@ void Game::showAllMap(int viewLeftUpX, int viewLeftUpY, int x, int y)
 	}
 	SetColor(7);
 
+	//Output Now player
 	if (now->getName() == "Role 1")
 	{
 		SetColor(10);
@@ -608,17 +674,25 @@ void Game::showAllMap(int viewLeftUpX, int viewLeftUpY, int x, int y)
 		SetColor(7);
 		roles[2]->printInfo(82, 29);
 	}
+	//===============
 }
 
+// Intent: Start the game for the given role
+// Pre: target must be a valid Role object
+// Post: Manages the game flow for the given role, including movement, interaction, and combat
 void Game::gameStart(Role* target)
 {
+	//Set Move
 	maxMove = 0;
 
+	//Declare video view map
 	int viewLeftUpX = min(max(target->ePos.x - 15, 0), 10);
 	int viewLeftUpY = min(max(target->ePos.y - 10, 0), 100);
-	showBoard(viewLeftUpX, viewLeftUpY, target->ePos.x, target->ePos.y, true, { 0,0 }, true);
-	//printFileAtPosition("mainInfo.txt", 77, 2);
 
+	//Show Board
+	showBoard(viewLeftUpX, viewLeftUpY, target->ePos.x, target->ePos.y, true, { 0,0 }, true);
+
+	//Output
 	gotoxy(78, 3);
 	std::cout << "Current Player: " << now->getName();
 	gotoxy(78, 25);
@@ -633,21 +707,27 @@ void Game::gameStart(Role* target)
 	maxMove = (now->getSpeed() / 10) * now->RolltheDice(now->getSpeed() / 10, 0, 78, 5);
 	gotoxy(78, 4);
 	cout << "move step: " << maxMove;
+	//===================
 
+	//Declare input
 	char input = ' ';
 
+	//input can not Enter and died
 	while (input != 13 && now->getVitality() > 0)
 	{
+		//Declare state
 		bool isMove = true;
 		bool moveVideo = false;
 		Position delta;
 
+		//Input
 		input = _getch();
 
+		//Move up
 		if ((input == 'W' || input == 'w') && maxMove > 0)
 		{
 
-
+			//Detect can move
 			if (vaildMove({ target->ePos.x, target->ePos.y - 1 }, false)) {
 				target->ePos.y--;
 			}
@@ -663,15 +743,18 @@ void Game::gameStart(Role* target)
 
 			}
 
+			//Detect need change video view
 			if (target->ePos.y - 1 < viewLeftUpY) {
 				viewLeftUpY--;
 				moveVideo = true;
 			}
 
+			//Set delta
 			delta = { 0,-1 };
 		}
-		else if ((input == 'S' || input == 's') && maxMove > 0)
+		else if ((input == 'S' || input == 's') && maxMove > 0)//Move down
 		{
+			//Detect can move
 			if (vaildMove({ target->ePos.x, target->ePos.y + 1 }, false)) {
 				target->ePos.y++;
 			}
@@ -686,16 +769,18 @@ void Game::gameStart(Role* target)
 				}
 			}
 
+			//Detect change video view
 			if (target->ePos.y + 1 >= viewLeftUpY + 20) {
 				viewLeftUpY++;
 				moveVideo = true;
 			}
 
+			//Set delta
 			delta = { 0, 1 };
 		}
-		else if ((input == 'A' || input == 'a') && maxMove > 0)
+		else if ((input == 'A' || input == 'a') && maxMove > 0) //move left
 		{
-
+			//Detect can move
 			if (vaildMove({ target->ePos.x - 1, target->ePos.y }, false)) {
 				target->ePos.x--;
 			}
@@ -710,15 +795,18 @@ void Game::gameStart(Role* target)
 				}
 			}
 
+			//Detect change video view
 			if (target->ePos.x - 1 < viewLeftUpX) {
 				viewLeftUpX--;
 				moveVideo = true;
 			}
 
+			//Set delta
 			delta = { -1, 0 };
 		}
-		else if ((input == 'D' || input == 'd') && maxMove > 0)
+		else if ((input == 'D' || input == 'd') && maxMove > 0) //Move right
 		{
+			//Detect can move
 			if (vaildMove({ target->ePos.x + 1, target->ePos.y }, false)) {
 				target->ePos.x++;
 			}
@@ -733,23 +821,26 @@ void Game::gameStart(Role* target)
 				}
 			}
 
+			//Detect change video view
 			if (target->ePos.x + 1 >= viewLeftUpX + 40) {
 				viewLeftUpX++;
 				moveVideo = true;
 			}
 
+			//Set delta
 			delta = { 1, 0 };
 		}
-		else if (input == 'I' || input == 'i')
+		else if (input == 'I' || input == 'i') //Open Bag
 		{
 			isMove = false;
-			useItem();
 
+			useItem(); // Use bag item
+
+			//Set videoView
 			viewLeftUpX = min(max(target->ePos.x - 15, 0), 10);
 			viewLeftUpY = min(max(target->ePos.y - 10, 0), 100);
 
 			moveVideo = true;
-
 		}
 		else
 		{
@@ -758,7 +849,7 @@ void Game::gameStart(Role* target)
 			delta = { 0,0 };
 		}
 
-		if (isMove || moveVideo)
+		if (isMove || moveVideo) //if move or change video
 		{
 			if (isMove)
 			{
@@ -769,9 +860,10 @@ void Game::gameStart(Role* target)
 		}
 	}
 
+	//if the role not dead and in tent
 	if (now->getVitality() != 0)
 	{
-		if (board[now->ePos.y][now->ePos.x] == 'T')
+		if (board[now->ePos.y][now->ePos.x] == 'T') //cast skill to role
 		{
 			now->setVitality(now->getVitality() + 50);
 			now->setFocus(now->getFocus() + 5);
@@ -779,29 +871,40 @@ void Game::gameStart(Role* target)
 
 		now->setVitality(now->getVitality() + maxMove);
 	}
-
 }
 
+/**
+ * Intent : Initialize the game and enter the game loop until all characters' vitality drops to zero.
+ * Pre : Console size meets the required dimensions (70 rows, 120 columns).
+ * Post : Displays the game over screen.
+ */
 void Game::start()
 {
+	//Declare require screen size
 	const int requiredRows = 70;
 	const int requiredCols = 120;
 
+	//hide cursor
 	hideCursor();
-	// ­«½ÆÀË¬d¿Ã¹õ¤j¤p
+
+	//Detect Screen size
 	while (true) {
+		//check screen size
 		if (checkConsoleSize(requiredRows, requiredCols)) {
+			//Output start
 			system("cls");
 			printFileAtPosition("start.txt", 0, 0);
 			Sleep(2500);
 
-
+			//Output map
 			system("cls");
 			printFileAtPosition("BD2.txt", 0, 0);
 
+			//Output money
 			gotoxy(105, 1);
 			std::cout << "Money : " << now->getMoney() << " $";
 
+			//Output Role info
 			roles[0]->printInfo(6, 29);
 			roles[1]->printInfo(44, 29);
 			roles[2]->printInfo(82, 29);
@@ -814,6 +917,7 @@ void Game::start()
 		}
 	}
 
+	//Set order
 	for (auto i : roles)
 	{
 		order.push_back(i);
@@ -823,6 +927,7 @@ void Game::start()
 		return a->getSpeed() > b->getSpeed();
 		});
 
+	//Output
 	gotoxy(8, 1);
 
 	for (auto it = order.begin(); it != order.end(); ++it) {
@@ -837,19 +942,23 @@ void Game::start()
 			cout << " -> ";
 		}
 	}
+	//==============
 
+	//Start game and output current player info
 	while (true)
 	{
 		for (auto i : order)
 		{
 			now = i;
 
+			//check currentRole is alive
 			if (i->getVitality() == 0)
 			{
 				continue;
 			}
 			else
 			{
+				//Output
 				if (i->getName() == "Role 1")
 				{
 					SetColor(10);
@@ -871,9 +980,12 @@ void Game::start()
 					SetColor(7);
 					roles[2]->printInfo(82, 29);
 				}
+				//==============
 
+				//gameStart
 				gameStart(now);
 
+				//Output
 				if (i->getName() == "Role 1")
 				{
 					SetColor(7);
@@ -895,13 +1007,16 @@ void Game::start()
 					SetColor(7);
 					roles[2]->printInfo(82, 29);
 				}
+				//================
 			}
 
 			gotoxy(0, 41);
 		}
 
+		//Declare state
 		bool end = true;
 
+		//Check least one role alive
 		for (auto i : roles)
 		{
 			if (i->getVitality() > 0)
@@ -910,19 +1025,26 @@ void Game::start()
 			}
 		}
 
+		//Detect end
 		if (end)
 		{
 			break;
 		}
 	}
 
+	//Output gameover
 	system("cls");
 	printFileAtPosition("gameover.txt", 0, 0);
-
 }
 
+/**
+ * Intent : Validate whether a move to a target position is allowed based on the presence of walls or roads.
+ * Pre : A target position (target) and a boolean flag (alldetect) are provided.
+ * Post : Returns true if the move is valid, false otherwise.
+ */
 bool Game::vaildMove(Position target, bool alldetect)
 {
+	//Detect can choose (2 mode one is can choose interfenc object ,otherwise is not)
 	if (!alldetect)
 	{
 		return board[target.y][target.x] != ICON_IDX::WALL;
@@ -933,12 +1055,21 @@ bool Game::vaildMove(Position target, bool alldetect)
 	}
 }
 
+/**
+ * Intent : Handle the usage of an item from the player's bag, including selection and execution of item effects.
+ * Pre : The current player (now) has a bag with items and the game is in a state where items can be used.
+ * Post : The selected item is used, its effects are applied, and the game state is updated accordingly.
+ */
 bool Game::useItem()
 {
+	//Output
 	printFileAtPosition("mainInfo.txt", 77, 2);
+
+	//Declare
 	vector<pair<int, int>> temp;//bagIdx,itemIdx
 	vector<Bag>tempBag = now->getBag();
 
+	//==Output==
 	int index = 0;
 	for (auto i : tempBag)
 	{
@@ -969,12 +1100,14 @@ bool Game::useItem()
 	std::cout << "Choose UP (W), DOWN(D)  ";
 	gotoxy(78, 27);
 	std::cout << "Enter to check!         ";
+	//=====================================
 
-
+	//init video view
 	index = 0;
 	int viewLeftUpX = min(max(now->ePos.x - 15, 0), 10);
 	int viewLeftUpY = min(max(now->ePos.y - 10, 0), 100);
 
+	//Select mode
 	while (true)
 	{
 
@@ -1000,7 +1133,7 @@ bool Game::useItem()
 
 			break;
 		}
-		else if (command == 13)
+		else if (command == 13) //Enter
 		{
 			if (temp[index].second == ITEM_IDX::ITELEPORT_SCROLL)
 			{
@@ -1021,7 +1154,7 @@ bool Game::useItem()
 
 					char input = _getch();
 
-					if (input == 'W' || input == 'w')
+					if (input == 'W' || input == 'w') //Select up
 					{
 
 
@@ -1047,7 +1180,7 @@ bool Game::useItem()
 
 						delta = { 0,-1 };
 					}
-					else if (input == 'S' || input == 's')
+					else if (input == 'S' || input == 's') //Select down
 					{
 						if (vaildMove({ temp.x, temp.y + 1 }, true)) {
 							temp.y++;
@@ -1070,7 +1203,7 @@ bool Game::useItem()
 
 						delta = { 0, 1 };
 					}
-					else if (input == 'A' || input == 'a')
+					else if (input == 'A' || input == 'a')//Select left
 					{
 
 						if (vaildMove({ temp.x - 1, temp.y }, true)) {
@@ -1094,7 +1227,7 @@ bool Game::useItem()
 
 						delta = { -1, 0 };
 					}
-					else if (input == 'D' || input == 'd')
+					else if (input == 'D' || input == 'd') //Select right
 					{
 						if (vaildMove({ temp.x + 1, temp.y }, true)) {
 							temp.x++;
@@ -1117,13 +1250,16 @@ bool Game::useItem()
 
 						delta = { 1, 0 };
 					}
-					else if (input == 13)
+					else if (input == 13)//Enter
 					{
+						//Set pos
 						now->ePos.x = temp.x;
 						now->ePos.y = temp.y;
 
+						//Show Board
 						showBoard(viewLeftUpX, viewLeftUpY, temp.x, temp.y, true, delta, true);
 
+						//==Output==
 						printFileAtPosition("mainInfo.txt", 77, 2);
 
 						gotoxy(78, 3);
@@ -1137,6 +1273,8 @@ bool Game::useItem()
 						std::cout << "W,A,S,D to Move";
 						gotoxy(78, 4);
 						cout << "move step: " << maxMove;
+						//=============
+
 						break;
 					}
 					else
@@ -1146,7 +1284,7 @@ bool Game::useItem()
 						delta = { 0,0 };
 					}
 
-					if (isMove || moveVideo)
+					if (isMove || moveVideo) //Detect video change
 					{
 						showBoard(viewLeftUpX, viewLeftUpY, temp.x, temp.y, moveVideo, delta, false);
 					}
@@ -1154,21 +1292,21 @@ bool Game::useItem()
 
 				}
 			}
-			else if (temp[index].second == ITEM_IDX::ITENT)
+			else if (temp[index].second == ITEM_IDX::ITENT) //use Tent
 			{
 				board[now->ePos.y][now->ePos.x] = 'T';
 			}
 
-			if (tempBag[index].type == BAG_TYPE::ITEM)
+			if (tempBag[index].type == BAG_TYPE::ITEM) //use Item
 			{
 				now->useItem(temp[index].second, temp[index].first);
 			}
-			else if (tempBag[index].type == BAG_TYPE::EQUIPMENT)
+			else if (tempBag[index].type == BAG_TYPE::EQUIPMENT) //use equipment
 			{
 				now->wearEquipment(temp[index].second, temp[index].first);
-
 			}
 
+			//==Output info==
 			if (now->getName() == "Role 1")
 			{
 				SetColor(10);
@@ -1204,10 +1342,11 @@ bool Game::useItem()
 			std::cout << "W,A,S,D to Move";
 			gotoxy(78, 4);
 			cout << "move step: " << maxMove;
+			//====================
 
 			return true;
 		}
-		else if (command == 'W' || command == 'w')
+		else if (command == 'W' || command == 'w') //select up
 		{
 			gotoxy(78, 4 + index % 10);
 			std::cout << "  ";
@@ -1235,7 +1374,7 @@ bool Game::useItem()
 			std::cout << "->";
 
 		}
-		else if (command == 'S' || command == 's')
+		else if (command == 'S' || command == 's')//select down
 		{
 			gotoxy(78, 4 + index % 10);
 			std::cout << "  ";
@@ -1265,4 +1404,3 @@ bool Game::useItem()
 
 	return false;
 }
-
