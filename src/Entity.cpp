@@ -312,6 +312,14 @@ double Entity::RolltheDice(int diceNum, int successNum, int  x, int y)
 {
 	//Declare
 	double successRate = 0;
+	double mul = 1;
+
+	//Debuff angry check
+	if (findBuffs(Buff::BUFF_IDX::BANGRY))
+	{
+		mul = 0.7;
+	}
+
 
 	//Output pos
 	gotoxy(x, y);
@@ -332,7 +340,7 @@ double Entity::RolltheDice(int diceNum, int successNum, int  x, int y)
 		{
 			int Roll = rand() % 100 + 1;
 
-			if (Roll < curHitRate) //succes
+			if (Roll < curHitRate * mul) //succes
 			{
 				successRate++;
 
@@ -355,11 +363,7 @@ double Entity::RolltheDice(int diceNum, int successNum, int  x, int y)
 	}
 	std::cout << "\n";
 
-	//Debuff angry check
-	if (findBuffs(Buff::BUFF_IDX::BANGRY))
-	{
-		successRate * 0.7;
-	}
+
 
 	return successRate / diceNum;
 }
