@@ -105,7 +105,7 @@ void Equipment::updateEquipment()
 	}
 	else if (weapon == WEAPON_IDX::ELUCIDATOR_DARK_REPULSER)
 	{
-		skills[SKILL_IDX::ATTACK].diceNum = 6;
+		skills[SKILL_IDX::ATTACK].diceNum = 3;
 		ePAttack += 30;
 	}
 
